@@ -5,6 +5,7 @@ import { AppShell } from '@/components/AppShell'
 import { useStore } from '@/data/storeContext'
 import { useI18n } from '@/i18n/context'
 import { buildDemoScenarios } from '@/lib/demoQr'
+import { isSimulatedOffline, setSimulatedOffline, useIsOnline } from '@/lib/offline'
 
 /** Test QR codes for every scenario. Open on a laptop, scan with the phone. Public route. */
 export default function Demo() {
@@ -12,6 +13,8 @@ export default function Demo() {
   const { resetDemo } = useStore()
   const [scenarios, setScenarios] = useState(() => buildDemoScenarios())
   const [resetDone, setResetDone] = useState(false)
+  useIsOnline() // re-render when the toggle changes
+  const offline = isSimulatedOffline()
 
   return (
     <AppShell title={t('demo.title')} hideNav>
@@ -34,6 +37,18 @@ export default function Demo() {
             className="min-h-tap w-full rounded-control border-2 border-brand-700 bg-surface px-4 text-base font-bold text-brand-700"
           >
             {t('demo.reset')}
+          </button>
+          <button
+            type="button"
+            role="switch"
+            aria-checked={offline}
+            onClick={() => setSimulatedOffline(!offline)}
+            className="flex min-h-tap w-full items-center justify-between gap-3 rounded-control border-2 border-brand-700 bg-surface px-4 text-left text-base font-bold text-brand-700"
+          >
+            <span>{t('demo.offline')}</span>
+            <span className={offline ? 'rounded-full bg-warning-tint px-3 py-1 text-warning' : 'rounded-full bg-brand-50 px-3 py-1'}>
+              {offline ? t('demo.offline.on') : t('demo.offline.off')}
+            </span>
           </button>
           <p aria-live="polite" className="text-base font-bold text-success">
             {resetDone && t('demo.resetDone')}

@@ -28,7 +28,7 @@ export interface Payout {
 /** The mock "redemption database". Populated in Phase 3/4. */
 export interface Voucher {
   id: string
-  value: 2 | 5 | 10
+  value: number
   expiry: string // YYYY-MM-DD
   usedAt?: string
   merchantId?: string

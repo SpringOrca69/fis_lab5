@@ -11,16 +11,18 @@ interface Props {
   children: ReactNode
   /** Hide the bottom nav, e.g. while the camera is active (Phase 3). */
   hideNav?: boolean
+  /** Plain white page for calm result screens. */
+  plain?: boolean
 }
 
 /** Header (title + bell), scrolling content, disclaimer footer, bottom nav. */
-export function AppShell({ title, children, hideNav = false }: Props) {
+export function AppShell({ title, children, hideNav = false, plain = false }: Props) {
   const { t } = useI18n()
   const { state } = useStore()
   const unread = unreadCount(state)
 
   return (
-    <div className="mx-auto flex min-h-dvh max-w-[30rem] flex-col bg-canvas shadow-card">
+    <div className={`mx-auto flex min-h-dvh max-w-[30rem] flex-col ${plain ? 'bg-surface' : 'bg-canvas'} shadow-card`}>
       <header className="sticky top-0 z-20 flex items-center justify-between gap-3 bg-brand-700 pt-[env(safe-area-inset-top)] pr-3 pl-5 text-white">
         <h1 className="py-3 text-title font-bold">{title}</h1>
         <Link

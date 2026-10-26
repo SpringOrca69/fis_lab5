@@ -1,12 +1,13 @@
 import { dateKey } from '@/lib/dates'
 import { createSeed } from './seed'
-import type { AppState, Settings, Transaction } from './types'
+import type { AppState, Settings, Transaction, Voucher } from './types'
 
 export const STORAGE_KEY = 'heartpay:v1'
 
 export type Action =
   | { type: 'reset'; state: AppState }
   | { type: 'addTransaction'; transaction: Transaction }
+  | { type: 'redeem'; transaction: Transaction; vouchers: Voucher[] }
   | { type: 'markAllRead' }
   | { type: 'setSettings'; settings: Partial<Settings> }
 
@@ -24,6 +25,11 @@ export function reducer(state: AppState, action: Action): AppState {
           p.id === tx.payoutId && p.status === 'scheduled' ? { ...p, expected: p.expected + tx.amount } : p,
         ),
       }
+    }
+    case 'redeem': {
+      const next = reducer(state, { type: 'addTransaction', transaction: action.transaction })
+      const ids = new Set(action.vouchers.map((v) => v.id))
+      return { ...next, vouchers: [...next.vouchers.filter((v) => !ids.has(v.id)), ...action.vouchers] }
     }
     case 'markAllRead':
       return { ...state, notifications: state.notifications.map((n) => ({ ...n, read: true })) }

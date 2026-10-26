@@ -9,7 +9,7 @@ Source of truth for scope is `plan.md` (+ `changes.md`). This file says **what o
 | 1 | Foundations | approved | 2026-10-26 |
 | 2 | Login + Home | approved | 2026-10-26 |
 | 3 | Scan flow | approved | 2026-10-26 |
-| 4 | Results | todo | |
+| 4 | Results | needs-human | |
 | 5 | Money screens | todo | |
 | 6 | Support + profile | todo | |
 | 7 | Translations | todo | |

@@ -92,3 +92,20 @@ body {
     scroll-behavior: auto !important;
   }
 }
+
+/* Result screens: the tick settles in once. Skipped when motion is reduced. */
+@keyframes settle {
+  from {
+    transform: scale(0.7);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .settle {
+    animation: settle 0.35s ease-out both;
+  }
+}
