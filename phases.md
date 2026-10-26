@@ -16,6 +16,8 @@ Source of truth for scope is `plan.md` (+ `changes.md`). This file says **what o
 | 8 | Hardening | todo | |
 | 9 | PWA (optional) | todo | |
 
+**Deferred human check:** P0-3 (Vercel HTTPS URL, and `/home` deep link, open on a phone) is **pending**. Deferred by the user on 2026-10-26; must pass before Phase 3 starts.
+
 Status values: `todo` → `building` → `testing` → `review` → `needs-human` → `approved`.
 
 ## The loop (per phase)
