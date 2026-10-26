@@ -1,6 +1,10 @@
 # Phase 7 approval (Translations)
 
-## Verdict: CHANGES REQUESTED (one small fix)
+## Verdict: APPROVED (loop 1 re-review; P7-4 native review is out of band)
+
+Re-review: the requested Tamil fix is in (commit aec2b6b). `break-words` was removed from the no-money line and the size is 1.5rem. In `ta-08` and `ta-09` the line now wraps only between words (பணம் / எடுக்கப்படவில்லை), is the largest text on the screen, and nothing overflows. Only `PaymentFailed.tsx` and `index.css` changed since the first review, so nothing else regressed. Tester re-run: lint, 121 vitest, build and 41 e2e all pass.
+
+(The sections below are from the first review. The requested change is now done.)
 
 ## Checks passed
 - No TODO-TRANSLATE in src, public/captions or README. translations.test.ts enforces key parity, no empty strings and no TODO.
