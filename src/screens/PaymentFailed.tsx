@@ -1,4 +1,4 @@
-import { CircleX } from 'lucide-react'
+import { CircleX, Phone } from 'lucide-react'
 import { useEffect, useRef } from 'react'
 import { Link, useSearchParams } from 'react-router'
 import { AppShell } from '@/components/AppShell'
@@ -49,8 +49,9 @@ export default function PaymentFailed() {
         </Link>
         <Link
           to="/help"
-          className="flex min-h-tap-pay items-center justify-center rounded-control border-2 border-brand-700 bg-surface px-4 text-base font-bold text-brand-700"
+          className="flex min-h-tap-pay items-center justify-center gap-2 rounded-control border-2 border-brand-700 bg-surface px-4 text-base font-bold text-brand-700"
         >
+          <Phone aria-hidden className="size-6" />
           {t('pay.callHelper')}
         </Link>
       </div>

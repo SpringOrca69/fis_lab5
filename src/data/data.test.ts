@@ -97,3 +97,17 @@ describe('store persistence (P1-5)', () => {
     expect(payoutForDate(next, dateKey(NOW))?.expected).toBe(85)
   })
 })
+
+describe('addBooking', () => {
+  it('P6-3 adds a booking and an unread notification', () => {
+    const s0 = createSeed(NOW)
+    const s = reducer(s0, {
+      type: 'addBooking',
+      booking: { id: 'B-1', date: '2026-10-27', slot: 'am', name: 'Ah Seng', phone: '9000 0000', note: '', status: 'booked' },
+      notification: { id: 'N-B-1', type: 'booking', createdAt: NOW.toISOString(), read: false, i18nKey: 'notif.booking', params: { date: '2026-10-27', slot: 'am' } },
+    })
+    expect(s.bookings).toHaveLength(1)
+    expect(s.notifications).toHaveLength(s0.notifications.length + 1)
+    expect(s.notifications[0].read).toBe(false)
+  })
+})
