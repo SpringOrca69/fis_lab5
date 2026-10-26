@@ -1,0 +1,12 @@
+@import '@fontsource/noto-sans/400.css';
+@import '@fontsource/noto-sans/700.css';
+@import '@fontsource/noto-sans-sc/400.css';
+@import '@fontsource/noto-sans-sc/700.css';
+@import '@fontsource/noto-sans-tamil/400.css';
+@import '@fontsource/noto-sans-tamil/700.css';
+@import 'tailwindcss';
+
+html {
+  font-size: 18px;
+  font-family: 'Noto Sans', 'Noto Sans SC', 'Noto Sans Tamil', system-ui, sans-serif;
+}

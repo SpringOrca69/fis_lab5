@@ -1,0 +1,25 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm *)",
+      "Bash(npx playwright *)",
+      "Bash(npx vitest *)",
+      "Bash(git status *)",
+      "Bash(git diff *)",
+      "Bash(git log *)",
+      "Bash(git add *)",
+      "Bash(git commit *)",
+      "Bash(git branch *)",
+      "Bash(git checkout *)",
+      "Bash(git switch *)",
+      "Bash(git merge *)"
+    ],
+    "ask": [
+      "Bash(git push *)"
+    ]
+  },
+  "enabledPlugins": {
+    "playwright@anthropic-plugin-directory": true,
+    "frontend-design@anthropic-plugin-directory": true
+  }
+}
