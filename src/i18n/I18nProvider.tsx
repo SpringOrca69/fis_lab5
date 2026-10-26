@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useState, type ReactNode } from 'react'
 import { LANGS, type Lang } from '@/lib/format'
 import { I18nContext } from './context'
-import type { TranslationKey } from './en'
+import type { PluralKey, TranslationKey } from './en'
 import { translate } from './translate'
 
 export const LANG_KEY = 'heartpay:lang'
@@ -33,7 +33,7 @@ export function I18nProvider({ children }: { children: ReactNode }) {
   }, [])
 
   const value = useMemo(
-    () => ({ lang, setLang, t: (key: TranslationKey, params?: Record<string, string | number>) => translate(lang, key, params) }),
+    () => ({ lang, setLang, t: (key: TranslationKey | PluralKey, params?: Record<string, string | number>) => translate(lang, key, params) }),
     [lang, setLang],
   )
   return <I18nContext.Provider value={value}>{children}</I18nContext.Provider>

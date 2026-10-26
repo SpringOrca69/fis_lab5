@@ -1,13 +1,26 @@
 import { createBrowserRouter } from 'react-router'
-import Foundations from './screens/Foundations'
+import { RequireAuth } from './auth/RequireAuth'
+import Home from './screens/Home'
+import Login from './screens/Login'
 import Placeholder from './screens/Placeholder'
 
+/**
+ * Everything except `/`, `/demo` and `/help` needs a login. Help stays open
+ * because the "Singpass login trouble" path on the login screen links to it.
+ */
 export const router = createBrowserRouter([
-  { path: '/', element: <Foundations /> },
-  { path: '/home', element: <Foundations /> },
-  { path: '/pay', element: <Placeholder titleKey="nav.pay" /> },
-  { path: '/history', element: <Placeholder titleKey="nav.history" /> },
-  { path: '/payouts', element: <Placeholder titleKey="nav.payout" /> },
-  { path: '/stall', element: <Placeholder titleKey="nav.stall" /> },
-  { path: '/notifications', element: <Placeholder titleKey="header.notifications" /> },
+  { path: '/', element: <Login /> },
+  { path: '/demo', element: <Placeholder titleKey="app.name" /> },
+  { path: '/help', element: <Placeholder titleKey="common.getHelp" /> },
+  {
+    element: <RequireAuth />,
+    children: [
+      { path: '/home', element: <Home /> },
+      { path: '/pay', element: <Placeholder titleKey="nav.pay" /> },
+      { path: '/history', element: <Placeholder titleKey="nav.history" /> },
+      { path: '/payouts', element: <Placeholder titleKey="nav.payout" /> },
+      { path: '/stall', element: <Placeholder titleKey="nav.stall" /> },
+      { path: '/notifications', element: <Placeholder titleKey="header.notifications" /> },
+    ],
+  },
 ])
