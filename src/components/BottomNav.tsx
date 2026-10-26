@@ -49,7 +49,7 @@ export function BottomNav() {
                   >
                     <Icon className="size-6" strokeWidth={isActive ? 2.5 : 2} />
                   </span>
-                  <span className="max-w-full truncate">{t(key)}</span>
+                  <span className="max-w-full text-center break-words">{t(key)}</span>
                 </>
               )}
             </NavLink>

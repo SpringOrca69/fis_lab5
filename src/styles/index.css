@@ -123,3 +123,9 @@ body {
     padding: 0 !important;
   }
 }
+
+/* Tamil words are long: let the big "No money was taken" line shrink a little (still the largest text, never under 18px). */
+:lang(ta) .text-amount-wide {
+  font-size: 1.8rem;
+  line-height: 1.3;
+}

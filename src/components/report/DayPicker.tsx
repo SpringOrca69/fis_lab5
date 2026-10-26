@@ -63,7 +63,7 @@ export function DayPicker({ keys, value, onChange }: Props) {
         className="flex min-h-tap-pay min-w-0 flex-1 items-center justify-center gap-2 rounded-control border-2 border-brand-700 bg-surface px-3 text-base font-bold text-brand-900"
       >
         <CalendarDays aria-hidden className="size-6 shrink-0" />
-        <span className="truncate">{longDate(value)}</span>
+        <span className="break-words text-left">{longDate(value)}</span>
       </button>
       <button
         type="button"

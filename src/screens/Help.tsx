@@ -58,6 +58,8 @@ function VideoCard({ id, title, time }: { id: string; title: string; time: strin
 export default function Help() {
   const { t, lang, setLang } = useI18n()
   const [more, setMore] = useState(false)
+  // Keep the phone number on one line; the words around it may wrap in longer languages.
+  const [callBefore, callAfter] = t('help.call.button', { phone: '\u0001' }).split('\u0001')
 
   return (
     <AppShell title={t('help.title')}>
@@ -72,7 +74,11 @@ export default function Help() {
             className="mt-3 flex min-h-tap-pay items-center justify-center gap-3 rounded-control bg-brand-700 px-4 text-lg font-bold text-white"
           >
             <Phone aria-hidden className="size-6" />
-            {t('help.call.button', { phone: HELPLINE })}
+            <span className="text-center">
+              {callBefore}
+              <span className="whitespace-nowrap">{HELPLINE}</span>
+              {callAfter}
+            </span>
           </a>
           <p className="mt-3 text-base font-bold">{t('help.call.hours')}</p>
           <p className="text-base text-ink-muted">{t('help.call.languages')}</p>
