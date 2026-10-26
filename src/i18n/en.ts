@@ -171,6 +171,7 @@ export const en = {
   "result.reason.insufficient": "Not enough voucher value for this amount.",
   "result.reason.network": "No internet connection. Nothing was charged. Try again when online.",
   "result.reason.generic": "Something went wrong. Nothing was charged.",
+  "offline.banner": "No internet. You can still read your sales and help. Payments are paused.",
   "demo.offline": "Simulate offline",
   "demo.offline.on": "On",
   "demo.offline.off": "Off",

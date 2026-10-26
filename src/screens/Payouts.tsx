@@ -27,7 +27,6 @@ export default function Payouts() {
             <Link
               to={href(tonight)}
               data-testid="payout-tonight"
-              aria-label={`${t('payouts.tonight')}, ${money(tonight.expected)}. ${t('payouts.seeReport')}`}
               className="block rounded-card bg-surface p-5 shadow-card ring-2 ring-brand-700"
             >
               <h2 id="tonight-h" className="text-lg font-bold">
@@ -42,6 +41,7 @@ export default function Payouts() {
                 {t('payouts.bank', { last4: state.merchant.bankLast4 })}
                 <ChevronRight aria-hidden className="size-6" />
               </p>
+              <span className="sr-only">{t('payouts.seeReport')}</span>
             </Link>
           </section>
         )}

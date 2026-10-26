@@ -1,8 +1,9 @@
 import { Scanner as QrScanner, type IDetectedBarcode, type IScannerError } from '@yudiel/react-qr-scanner'
-import { CircleHelp, Flashlight, Check, Keyboard, X } from 'lucide-react'
+import { CircleHelp, Flashlight, Check, Keyboard, WifiOff, X } from 'lucide-react'
 import { useEffect, useRef, useState, type ReactNode } from 'react'
 import { useI18n } from '@/i18n/context'
 import { setTorch, torchSupported, trackOf } from '@/lib/camera'
+import { useIsOnline } from '@/lib/offline'
 import { cn } from '@/lib/utils'
 
 export const SLOW_HINT_MS = 10_000
@@ -116,6 +117,7 @@ export function CameraView(p: Props) {
     if (ok) setTorchOn(next)
   }
 
+  const offline = !useIsOnline()
   const status = p.read ? t('pay.status.read') : starting ? t('pay.starting') : paused ? '' : t('pay.status.scanning')
 
   return (
@@ -132,6 +134,13 @@ export function CameraView(p: Props) {
           components={{ finder: false, torch: false, onOff: false, zoom: false }}
           styles={{ container: { width: '100%', height: '100%' }, video: { objectFit: 'cover' } }}
         />
+
+        {offline && (
+          <div role="status" className="absolute inset-x-0 bottom-0 flex items-center gap-2 bg-warning-tint px-4 py-2 text-base font-bold text-warning">
+            <WifiOff aria-hidden className="size-6 shrink-0" />
+            {t('offline.banner')}
+          </div>
+        )}
 
         {/* Hint, on a backing so it reads over any scene */}
         <div className="pointer-events-none absolute inset-x-0 top-0 flex flex-col items-center gap-2 bg-black/60 px-5 pt-[calc(env(safe-area-inset-top)+0.75rem)] pb-3 text-center">
@@ -181,6 +190,7 @@ export function CameraView(p: Props) {
           <CtrlButton onClick={p.onHelp} Icon={CircleHelp} label={t('pay.help')} />
           <CtrlButton onClick={p.onCancel} Icon={X} label={t('pay.cancel')} />
         </div>
+        <p className="mt-2 text-center text-sm text-white/85">{t('app.disclaimer')}</p>
       </div>
 
       {p.children}

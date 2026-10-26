@@ -8,8 +8,13 @@ type Note = { freq: number; at: number; dur: number; gain: number; type: Oscilla
 
 let ctx: AudioContext | null = null
 
+/** Browsers block sound and vibration before the first tap. Skip quietly instead of logging warnings. */
+function allowed(): boolean {
+  return typeof navigator === 'undefined' || navigator.userActivation?.hasBeenActive !== false
+}
+
 function audio(): AudioContext | null {
-  if (typeof window === 'undefined') return null
+  if (typeof window === 'undefined' || !allowed()) return null
   const AC = window.AudioContext ?? (window as unknown as { webkitAudioContext?: typeof AudioContext }).webkitAudioContext
   if (!AC) return null
   try {
@@ -40,7 +45,7 @@ function play(notes: Note[]): void {
 }
 
 export function vibrate(pattern: number | number[], enabled: boolean): void {
-  if (enabled && typeof navigator !== 'undefined' && 'vibrate' in navigator) navigator.vibrate(pattern)
+  if (enabled && typeof navigator !== 'undefined' && 'vibrate' in navigator && allowed()) navigator.vibrate(pattern)
 }
 
 /** Bright rising three-note chime. */

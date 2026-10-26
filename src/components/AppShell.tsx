@@ -4,6 +4,7 @@ import { Link } from 'react-router'
 import { unreadCount } from '@/data/selectors'
 import { useStore } from '@/data/storeContext'
 import { useI18n } from '@/i18n/context'
+import { OfflineBanner } from './OfflineBanner'
 import { BottomNav } from './BottomNav'
 
 interface Props {
@@ -42,6 +43,7 @@ export function AppShell({ title, children, hideNav = false, plain = false }: Pr
         </Link>
       </header>
 
+      <OfflineBanner />
       <main className="flex-1 px-5 py-5">{children}</main>
 
       <footer className="print:text-black px-5 pt-2 pb-4 text-center text-sm text-ink-muted">{t('app.disclaimer')}</footer>

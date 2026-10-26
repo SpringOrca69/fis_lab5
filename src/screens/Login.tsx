@@ -1,5 +1,6 @@
 import { Check, CircleAlert, HeartHandshake, LifeBuoy, Loader2 } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
+import { OfflineBanner } from '@/components/OfflineBanner'
 import { Link, Navigate, useNavigate, useSearchParams } from 'react-router'
 import { useAuth } from '@/auth/authContext'
 import { useI18n } from '@/i18n/context'
@@ -47,6 +48,7 @@ export default function Login() {
 
   return (
     <div className="mx-auto flex min-h-dvh max-w-[30rem] flex-col bg-canvas pt-[env(safe-area-inset-top)] shadow-card">
+      <OfflineBanner />
       <main className="flex flex-1 flex-col gap-6 px-5 pt-6 pb-4">
         <header className="flex items-center gap-3">
           <span aria-hidden className="flex size-12 items-center justify-center rounded-card bg-brand-700 text-white">

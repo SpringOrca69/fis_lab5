@@ -43,6 +43,7 @@ test('P5-2 date picker limited to 14 days; filters; show all', async ({ page }) 
   await expect(page).toHaveURL(/\/history\/\d{4}-\d{2}-\d{2}/)
 
   await page.goto('/history')
+  await page.getByTestId('report-total').waitFor()
   await page.getByRole('button', { name: 'Evening' }).click()
   const eveningCount = await page.getByTestId('payment-list').locator('li:visible').count().catch(() => 0)
   await page.getByRole('button', { name: 'All' }).click()
@@ -68,6 +69,7 @@ test('P5-3 mismatch day explained, Report a problem goes to Help', async ({ page
 test('P5-4 CSV matches the displayed list', async ({ page }) => {
   await login(page)
   await page.goto('/history')
+  await page.getByTestId('report-total').waitFor()
   const more = page.getByRole('button', { name: /^Show all/ })
   if (await more.count()) await more.click()
   const rows = await page.getByTestId('payment-list').locator('li').allInnerTexts()
@@ -98,6 +100,7 @@ test('P5-5 payouts: tonight first, badges with words, row opens report', async (
 test('P5-2b filter chips narrow the list by time of day; Show all expands', async ({ page }) => {
   await login(page)
   await page.goto('/history')
+  await page.getByTestId('report-total').waitFor()
   const rows = page.getByTestId('payment-list').locator('li')
   const visibleCount = () => rows.evaluateAll((els) => els.filter((e) => (e as unknown as { offsetParent: unknown }).offsetParent !== null).length)
   const showAll = page.getByRole('button', { name: /^Show all/ })
@@ -125,6 +128,7 @@ test('P5-2b filter chips narrow the list by time of day; Show all expands', asyn
 test('P5-6 print media: nav, bell, controls hidden; shop header shown', async ({ page }) => {
   await login(page)
   await page.goto('/history')
+  await page.getByTestId('report-total').waitFor()
   await page.emulateMedia({ media: 'print' })
   await expect(page.getByRole('navigation')).toBeHidden()
   await expect(page.getByRole('button', { name: 'Download CSV' })).toBeHidden()
