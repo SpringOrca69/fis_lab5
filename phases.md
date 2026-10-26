@@ -5,7 +5,7 @@ Source of truth for scope is `plan.md` (+ `changes.md`). This file says **what o
 ## Status
 | Phase | Name | Status | Approved on |
 |---|---|---|---|
-| 0 | Scaffold | todo | |
+| 0 | Scaffold | needs-human | |
 | 1 | Foundations | todo | |
 | 2 | Login + Home | todo | |
 | 3 | Scan flow | todo | |
