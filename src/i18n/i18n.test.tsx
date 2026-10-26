@@ -47,7 +47,17 @@ describe('i18n', () => {
   })
 
   it('interpolates params', () => {
-    expect(translate('en', 'foundations.payments', { count: 3 })).toBe('3 payments')
+    expect(translate('en', 'home.payments', { count: 3 })).toBe('3 payments')
+  })
+
+  it('picks plural forms per language (1 payment, not 1 payments)', () => {
+    expect(translate('en', 'home.payments', { count: 1 })).toBe('1 payment')
+    expect(translate('en', 'home.payments', { count: 0 })).toBe('0 payments')
+    expect(translate('en', 'home.payments', { count: 5 })).toBe('5 payments')
+    expect(translate('zh', 'home.payments', { count: 1 })).toBe('1 笔付款')
+    expect(translate('ms', 'home.payments', { count: 1 })).toBe('1 bayaran')
+    expect(translate('ta', 'home.payments', { count: 1 })).toBe('1 கட்டணம்')
+    expect(translate('ta', 'home.payments', { count: 2 })).toBe('2 கட்டணங்கள்')
   })
 
   it('has no banned copy in English', () => {

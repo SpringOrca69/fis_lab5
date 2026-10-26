@@ -1,37 +1,51 @@
 import type { Dictionary } from './en'
 
-/** Stub: English text marked TODO-TRANSLATE until Phase 7. Missing keys fail type-checking. */
+/** Stub: English text marked TODO-TRANSLATE until Phase 7 (plural forms of home.payments are real). Missing keys fail type-checking. */
 export const ms: Dictionary = {
   'app.name': 'HeartPay',
   'app.disclaimer': "TODO-TRANSLATE: Concept prototype. Not affiliated with CDC or GovTech.",
-
   'nav.label': "TODO-TRANSLATE: Main menu",
   'nav.home': "TODO-TRANSLATE: Home",
   'nav.pay': "TODO-TRANSLATE: Pay",
   'nav.history': "TODO-TRANSLATE: History",
   'nav.payout': "TODO-TRANSLATE: Payout",
   'nav.stall': "TODO-TRANSLATE: Stall",
-
   'header.notifications': "TODO-TRANSLATE: Notifications",
   'header.unread': "TODO-TRANSLATE: {count} unread",
-
-  'lang.label': "TODO-TRANSLATE: Language",
+  'lang.label': 'Language',
   'lang.en': 'English',
   'lang.zh': '中文',
   'lang.ms': 'Bahasa Melayu',
   'lang.ta': 'தமிழ்',
-
   'common.laterPhase': "TODO-TRANSLATE: This page is coming soon.",
-
-  'foundations.title': "TODO-TRANSLATE: Home",
-  'foundations.todaySales': "TODO-TRANSLATE: Today's CDC sales",
-  'foundations.payments': "TODO-TRANSLATE: {count} payments",
-  'foundations.lastPayment': "TODO-TRANSLATE: Last payment",
-  'foundations.noPayments': "TODO-TRANSLATE: No payments yet today",
-  'foundations.paidTonight': "TODO-TRANSLATE: Paid to your bank tonight at midnight",
-  'foundations.mismatchDay': "TODO-TRANSLATE: Not matched, {amount} missing",
-  'foundations.resetDemo': "TODO-TRANSLATE: Reset demo data",
-
+  'common.back': "TODO-TRANSLATE: Back",
+  'common.tryAgain': "TODO-TRANSLATE: Try again",
+  'common.getHelp': "TODO-TRANSLATE: Get help",
+  'login.chooseLanguage': "TODO-TRANSLATE: Choose your language",
+  'login.singpass': "TODO-TRANSLATE: Log in with Singpass (demo)",
+  'login.loggingIn': "TODO-TRANSLATE: Logging in…",
+  'login.trouble': "TODO-TRANSLATE: Trouble logging in?",
+  'login.failTitle': "TODO-TRANSLATE: Singpass login trouble",
+  'login.failBody': "TODO-TRANSLATE: We couldn't log you in. Nothing has changed. Check your internet, then try again.",
+  'login.existingOnly': "TODO-TRANSLATE: For existing HeartPay shops only. Ask an ambassador to join.",
+  'login.needHelp': "TODO-TRANSLATE: Need help? Call {phone}",
+  'login.hours': "TODO-TRANSLATE: Daily 8am–10pm",
+  'login.tagline': "TODO-TRANSLATE: CDC vouchers made simple",
+  'home.title': "TODO-TRANSLATE: Home",
+  'home.loading': "TODO-TRANSLATE: Loading today’s sales",
+  'home.todaySales': "TODO-TRANSLATE: Today's CDC sales",
+  'home.payments.one': '{count} bayaran',
+  'home.payments.other': '{count} bayaran',
+  'home.lastPayment': "TODO-TRANSLATE: Last payment",
+  'home.noPayments': "TODO-TRANSLATE: No payments yet today",
+  'home.noPaymentsHint': "TODO-TRANSLATE: Your first payment will show here.",
+  'home.paidTonight': "TODO-TRANSLATE: Paid to your bank tonight at midnight",
+  'home.accept': "TODO-TRANSLATE: Accept CDC Payment",
+  'home.acceptHint': "TODO-TRANSLATE: Scan the customer's QR code",
+  'home.report': "TODO-TRANSLATE: Today's report",
+  'home.reportHint': "TODO-TRANSLATE: See every payment today",
+  'home.help': "TODO-TRANSLATE: Get help",
+  'home.helpHint': "TODO-TRANSLATE: Call a person, or learn how",
   'notif.mismatch': "TODO-TRANSLATE: Payout for {date} is short by {amount}.",
   'notif.payout': "TODO-TRANSLATE: Payment for {date}: {amount} paid to your bank.",
 }
