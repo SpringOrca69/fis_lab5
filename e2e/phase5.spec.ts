@@ -94,3 +94,40 @@ test('P5-5 payouts: tonight first, badges with words, row opens report', async (
   await expect(page).toHaveURL(/\/history\/\d{4}-\d{2}-\d{2}/)
   await expect(page.getByTestId('report-status')).toContainText('Received, matches')
 })
+
+test('P5-2b filter chips narrow the list by time of day; Show all expands', async ({ page }) => {
+  await login(page)
+  await page.goto('/history')
+  const rows = page.getByTestId('payment-list').locator('li')
+  const visibleCount = () => rows.evaluateAll((els) => els.filter((e) => (e as unknown as { offsetParent: unknown }).offsetParent !== null).length)
+  const showAll = page.getByRole('button', { name: /^Show all/ })
+  if (await showAll.count()) {
+    expect(await visibleCount()).toBe(5)
+    await showAll.click()
+  }
+  const all = await visibleCount()
+  const texts = await rows.allInnerTexts()
+  const hour = (s: string) => {
+    const m = s.match(/(\d+):(\d+)\s*(am|pm)/i)!
+    return (Number(m[1]) % 12) + (m[3].toLowerCase() === 'pm' ? 12 : 0)
+  }
+  const expected = { Morning: (h: number) => h < 12, Afternoon: (h: number) => h >= 12 && h < 17, Evening: (h: number) => h >= 17 }
+  let sum = 0
+  for (const [name, fn] of Object.entries(expected)) {
+    await page.getByRole('button', { name, exact: true }).click()
+    const n = await page.getByTestId('payment-list').locator('li').count().catch(() => 0)
+    expect(n).toBe(texts.filter((x) => fn(hour(x))).length)
+    sum += n
+  }
+  expect(sum).toBe(all)
+})
+
+test('P5-6 print media: nav, bell, controls hidden; shop header shown', async ({ page }) => {
+  await login(page)
+  await page.goto('/history')
+  await page.emulateMedia({ media: 'print' })
+  await expect(page.getByRole('navigation')).toBeHidden()
+  await expect(page.getByRole('button', { name: 'Download CSV' })).toBeHidden()
+  await expect(page.getByText('Ah Seng Minimart').first()).toBeVisible()
+  await page.screenshot({ path: `${SHOTS}/print-preview.png`, fullPage: true })
+})
