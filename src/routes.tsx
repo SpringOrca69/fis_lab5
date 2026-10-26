@@ -1,7 +1,9 @@
 import { createBrowserRouter } from 'react-router'
 import { RequireAuth } from './auth/RequireAuth'
 import Home from './screens/Home'
+import Demo from './screens/Demo'
 import Login from './screens/Login'
+import Pay from './screens/Pay'
 import Placeholder from './screens/Placeholder'
 
 /**
@@ -10,13 +12,13 @@ import Placeholder from './screens/Placeholder'
  */
 export const router = createBrowserRouter([
   { path: '/', element: <Login /> },
-  { path: '/demo', element: <Placeholder titleKey="app.name" /> },
+  { path: '/demo', element: <Demo /> },
   { path: '/help', element: <Placeholder titleKey="common.getHelp" /> },
   {
     element: <RequireAuth />,
     children: [
       { path: '/home', element: <Home /> },
-      { path: '/pay', element: <Placeholder titleKey="nav.pay" /> },
+      { path: '/pay', element: <Pay /> },
       { path: '/history', element: <Placeholder titleKey="nav.history" /> },
       { path: '/payouts', element: <Placeholder titleKey="nav.payout" /> },
       { path: '/stall', element: <Placeholder titleKey="nav.stall" /> },

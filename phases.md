@@ -8,7 +8,7 @@ Source of truth for scope is `plan.md` (+ `changes.md`). This file says **what o
 | 0 | Scaffold | approved | 2026-10-26 |
 | 1 | Foundations | approved | 2026-10-26 |
 | 2 | Login + Home | approved | 2026-10-26 |
-| 3 | Scan flow | todo | |
+| 3 | Scan flow | needs-human | |
 | 4 | Results | todo | |
 | 5 | Money screens | todo | |
 | 6 | Support + profile | todo | |
@@ -16,7 +16,7 @@ Source of truth for scope is `plan.md` (+ `changes.md`). This file says **what o
 | 8 | Hardening | todo | |
 | 9 | PWA (optional) | todo | |
 
-**Deferred human check:** P0-3 (Vercel HTTPS URL, and `/home` deep link, open on a phone) is **pending**. Deferred by the user on 2026-10-26; must pass before Phase 3 starts.
+**Deferred human check:** P0-3 (Vercel HTTPS URL, and `/home` deep link, open on a phone) **passed** (user confirmed 2026-10-26).
 
 Status values: `todo` → `building` → `testing` → `review` → `needs-human` → `approved`.
 
