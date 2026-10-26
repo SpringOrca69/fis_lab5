@@ -8,7 +8,10 @@ import PaymentFailed from './screens/PaymentFailed'
 import PaymentSuccess from './screens/PaymentSuccess'
 import Payouts from './screens/Payouts'
 import Report from './screens/Report'
-import Placeholder from './screens/Placeholder'
+import BookAmbassador from './screens/BookAmbassador'
+import Help from './screens/Help'
+import Notifications from './screens/Notifications'
+import Stall from './screens/Stall'
 
 /**
  * Everything except `/`, `/demo` and `/help` needs a login. Help stays open
@@ -17,7 +20,7 @@ import Placeholder from './screens/Placeholder'
 export const router = createBrowserRouter([
   { path: '/', element: <Login /> },
   { path: '/demo', element: <Demo /> },
-  { path: '/help', element: <Placeholder titleKey="common.getHelp" /> },
+  { path: '/help', element: <Help /> },
   {
     element: <RequireAuth />,
     children: [
@@ -28,8 +31,9 @@ export const router = createBrowserRouter([
       { path: '/history', element: <Report /> },
       { path: '/history/:date', element: <Report /> },
       { path: '/payouts', element: <Payouts /> },
-      { path: '/stall', element: <Placeholder titleKey="nav.stall" /> },
-      { path: '/notifications', element: <Placeholder titleKey="header.notifications" /> },
+      { path: '/help/book', element: <BookAmbassador /> },
+      { path: '/stall', element: <Stall /> },
+      { path: '/notifications', element: <Notifications /> },
     ],
   },
 ])

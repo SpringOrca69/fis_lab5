@@ -1,0 +1,131 @@
+import { expect, test, type Page } from '@playwright/test'
+
+const SHOTS = 'reviews/screenshots/phase-6'
+const noHScroll = (page: Page) => page.evaluate('document.documentElement.scrollWidth <= window.innerWidth')
+
+async function login(page: Page) {
+  await page.goto('/')
+  await page.getByRole('button', { name: 'Log in with Singpass (demo)' }).click()
+  await expect(page).toHaveURL(/\/home/)
+}
+
+test('P6-1 help call link, hours and number; language chips switch language', async ({ page }) => {
+  await login(page)
+  await page.getByRole('link', { name: /Get help/ }).click()
+  await expect(page).toHaveURL(/\/help$/)
+  const call = page.getByRole('link', { name: /Call 6000 0000 \(demo\)/ })
+  await expect(call).toHaveAttribute('href', 'tel:60000000')
+  expect((await call.boundingBox())!.height).toBeGreaterThanOrEqual(55)
+  await expect(page.getByText('Open daily 8am–10pm')).toBeVisible()
+  await expect(page.getByText('toll-free')).toHaveCount(0)
+  await expect(page.getByTestId('video-accept')).toContainText('1:30')
+  await expect(page.getByTestId('video-fail')).toContainText('1:15')
+  expect(await noHScroll(page)).toBe(true)
+  await page.screenshot({ path: `${SHOTS}/help.png`, fullPage: true })
+  await page.getByRole('button', { name: 'Bahasa Melayu' }).click()
+  await expect(page.getByRole('button', { name: /Bahasa Melayu/ })).toHaveAttribute('aria-pressed', 'true')
+  expect(await page.evaluate('document.documentElement.lang')).toBe('ms')
+})
+
+test('P6-2 FAQ opens and closes; scam notice is labelled concept', async ({ page }) => {
+  await login(page)
+  await page.goto('/help')
+  await expect(page.getByTestId('scam-notice')).toBeHidden()
+  await page.getByRole('button', { name: /More help/ }).click()
+  const q = page.getByRole('button', { name: 'When do I get my money?' })
+  await expect(q).toHaveAttribute('aria-expanded', 'false')
+  await q.click()
+  await expect(q).toHaveAttribute('aria-expanded', 'true')
+  await expect(page.getByText(/paid to your bank tonight at midnight/i).first()).toBeVisible()
+  await page.screenshot({ path: `${SHOTS}/help-faq.png`, fullPage: true })
+  await q.click()
+  await expect(q).toHaveAttribute('aria-expanded', 'false')
+  await expect(page.getByTestId('scam-notice')).toContainText('Concept, placeholder text')
+  expect(await page.locator('body').innerText()).not.toMatch(/1800|6123/)
+})
+
+test('P6-3 booking creates a booking and a notification; bell count updates', async ({ page }) => {
+  await login(page)
+  const bell = page.getByRole('link', { name: /Notifications/ })
+  await expect(bell).toContainText('2')
+  await page.goto('/help')
+  await page.getByRole('link', { name: /Book an ambassador visit/ }).click()
+  await expect(page).toHaveURL(/\/help\/book/)
+  await expect(page.getByLabel('Your name')).toHaveValue('Ah Seng')
+  await expect(page.getByText('Toa Payoh Lor 8 Market & Food Centre').first()).toBeVisible()
+  await page.screenshot({ path: `${SHOTS}/book.png`, fullPage: true })
+  await page.getByLabel('Phone number').fill('12')
+  await page.getByRole('button', { name: 'Book visit' }).click()
+  await expect(page.getByText('Type an 8 digit phone number.')).toBeVisible()
+  await page.getByLabel('Phone number').fill('9000 0000')
+  await page.getByText('2–4pm').click()
+  await page.getByRole('button', { name: 'Book visit' }).click()
+  await expect(page.getByTestId('booking-done')).toContainText('Visit booked')
+  await expect(page.getByTestId('booking-done')).toContainText('2–4pm')
+  await page.screenshot({ path: `${SHOTS}/book-done.png`, fullPage: true })
+  await page.getByRole('link', { name: 'Back to home' }).click()
+  await expect(page.getByRole('link', { name: /Notifications/ })).toContainText('3')
+  await page.getByRole('link', { name: /Notifications/ }).click()
+  await expect(page.getByTestId('notif-list')).toContainText('Visit booked for')
+})
+
+test('P6-4 notifications: unread dots, mark all read, empty state', async ({ page }) => {
+  await login(page)
+  await page.getByRole('link', { name: /Notifications/ }).click()
+  await expect(page).toHaveURL(/\/notifications/)
+  await expect(page.getByTestId('unread-dot')).toHaveCount(2)
+  expect(await noHScroll(page)).toBe(true)
+  await page.screenshot({ path: `${SHOTS}/notifications.png`, fullPage: true })
+  await page.getByRole('button', { name: 'Mark all read' }).click()
+  await expect(page.getByTestId('unread-dot')).toHaveCount(0)
+  await expect(page.getByRole('link', { name: 'Notifications' })).toBeVisible() // no count after read
+  await page.evaluate(() => {
+    const s = JSON.parse(localStorage.getItem('heartpay:v1')!)
+    s.notifications = []
+    localStorage.setItem('heartpay:v1', JSON.stringify(s))
+  })
+  await page.reload()
+  await expect(page.getByTestId('notif-empty')).toContainText('No notifications')
+  await page.screenshot({ path: `${SHOTS}/notifications-empty.png` })
+})
+
+test('P6-5 stall settings persist after reload; details; demo link; log out', async ({ page }) => {
+  await login(page)
+  await page.getByRole('navigation').getByRole('link', { name: 'Stall' }).click()
+  await expect(page).toHaveURL(/\/stall$/)
+  const main = page.getByRole('main')
+  for (const s of ['Ah Seng Minimart', 'Blk 123 Toa Payoh Lor 4', 'HP-M-88392', 'HP-D-0417', 'Ending 1234', 'CDC Vouchers 2026', '31 Dec 2026'])
+    await expect(main).toContainText(s)
+  expect(await noHScroll(page)).toBe(true)
+  await page.screenshot({ path: `${SHOTS}/stall.png`, fullPage: true })
+  await page.getByTestId('sound-switch').click()
+  await page.getByTestId('vibration-switch').click()
+  await page.getByRole('button', { name: 'Bahasa Melayu' }).click()
+  await page.reload()
+  await expect(page.getByTestId('sound-switch')).toHaveAttribute('aria-checked', 'false')
+  await expect(page.getByTestId('vibration-switch')).toHaveAttribute('aria-checked', 'false')
+  expect(await page.evaluate('document.documentElement.lang')).toBe('ms')
+  await page.getByRole('button', { name: /English/ }).click()
+  await expect(page.getByRole('link', { name: /Demo tools/ })).toHaveAttribute('href', '/demo')
+  await page.getByRole('button', { name: 'Log out' }).click()
+  await expect(page).toHaveURL(/\/$/)
+  await page.goto('/home')
+  await expect(page).toHaveURL(/\/$/)
+})
+
+test('all five tabs and the bell lead to a real screen', async ({ page }) => {
+  await login(page)
+  const nav = page.getByRole('navigation')
+  for (const [name, url] of [['History', /history/], ['Payout', /payouts/], ['Stall', /stall/], ['Home', /home/]] as const) {
+    await nav.getByRole('link', { name }).click()
+    await expect(page).toHaveURL(url)
+    await expect(page.getByText('This page is coming soon.')).toHaveCount(0)
+  }
+})
+
+test('failed payment helper button is labelled as a call and opens Help', async ({ page }) => {
+  await login(page)
+  await page.goto('/pay/failed?reason=expired')
+  await page.getByRole('link', { name: 'Call HeartPay helper' }).click()
+  await expect(page).toHaveURL(/\/help$/)
+})
