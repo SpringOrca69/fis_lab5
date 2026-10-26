@@ -50,7 +50,7 @@ function CtrlButton({ onClick, Icon, label, pressed, hidden, returnFocus }: { re
       )}
     >
       <Icon aria-hidden className="size-6" />
-      <span className="max-w-full truncate">{label}</span>
+      <span className="max-w-full text-center break-words">{label}</span>
     </button>
   )
 }

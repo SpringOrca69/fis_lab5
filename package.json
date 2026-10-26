@@ -9,6 +9,7 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "test": "vitest run",
+    "check:i18n": "vitest run src/i18n/translations.test.ts",
     "e2e": "playwright test"
   },
   "dependencies": {

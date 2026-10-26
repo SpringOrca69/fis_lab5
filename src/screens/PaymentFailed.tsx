@@ -36,11 +36,11 @@ export default function PaymentFailed() {
         <span aria-hidden className="settle mt-2 flex size-28 items-center justify-center rounded-full bg-danger-tint text-danger">
           <CircleX className="size-20" strokeWidth={2.5} />
         </span>
-        <h2 ref={headingRef} tabIndex={-1} className="mt-5 text-title font-bold text-danger outline-none">
+        <h2 ref={headingRef} tabIndex={-1} className="mt-5 max-w-full text-title font-bold text-danger outline-none break-words text-balance">
           {t('result.fail.title')}
         </h2>
-        <p className="mt-3 text-amount font-bold text-ink">{t('result.fail.noMoney')}</p>
-        <p className="mt-3 text-lg">{t(reason ? `result.reason.${reason}` : 'result.reason.generic')}</p>
+        <p className="text-amount-wide mt-3 max-w-full text-amount font-bold text-ink text-balance">{t('result.fail.noMoney')}</p>
+        <p className="mt-3 max-w-full text-lg break-words">{t(reason ? `result.reason.${reason}` : 'result.reason.generic')}</p>
       </div>
 
       <div className="mt-8 flex flex-col gap-4 pb-2">
