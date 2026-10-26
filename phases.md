@@ -9,12 +9,14 @@ Source of truth for scope is `plan.md` (+ `changes.md`). This file says **what o
 | 1 | Foundations | approved | 2026-10-26 |
 | 2 | Login + Home | approved | 2026-10-26 |
 | 3 | Scan flow | approved | 2026-10-26 |
-| 4 | Results | needs-human | |
+| 4 | Results | approved | 2026-10-26 |
 | 5 | Money screens | todo | |
 | 6 | Support + profile | todo | |
 | 7 | Translations | todo | |
 | 8 | Hardening | todo | |
 | 9 | PWA (optional) | todo | |
+
+**Deferred human check (P4-8 chime/vibration, passed 2026-10-26):** user confirmed.
 
 **Deferred human check:** P0-3 (Vercel HTTPS URL, and `/home` deep link, open on a phone) **passed** (user confirmed 2026-10-26).
 
