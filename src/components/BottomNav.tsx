@@ -22,7 +22,7 @@ export function BottomNav() {
   return (
     <nav
       aria-label={t('nav.label')}
-      className="sticky bottom-0 z-20 border-t border-line bg-surface pb-[env(safe-area-inset-bottom)] shadow-[0_-2px_8px_rgb(11_59_55/0.06)]"
+      className="print:hidden sticky bottom-0 z-20 border-t border-line bg-surface pb-[env(safe-area-inset-bottom)] shadow-[0_-2px_8px_rgb(11_59_55/0.06)]"
     >
       <ul className="mx-auto flex max-w-[30rem] items-stretch justify-between px-1">
         {ITEMS.map(({ to, key, Icon, primary }) => (

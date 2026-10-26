@@ -23,12 +23,12 @@ export function AppShell({ title, children, hideNav = false, plain = false }: Pr
 
   return (
     <div className={`mx-auto flex min-h-dvh max-w-[30rem] flex-col ${plain ? 'bg-surface' : 'bg-canvas'} shadow-card`}>
-      <header className="sticky top-0 z-20 flex items-center justify-between gap-3 bg-brand-700 pt-[env(safe-area-inset-top)] pr-3 pl-5 text-white">
+      <header className="print:static print:bg-white print:text-black sticky top-0 z-20 flex items-center justify-between gap-3 bg-brand-700 pt-[env(safe-area-inset-top)] pr-3 pl-5 text-white">
         <h1 className="py-3 text-title font-bold">{title}</h1>
         <Link
           to="/notifications"
           aria-label={unread > 0 ? `${t('header.notifications')}, ${t('header.unread', { count: unread })}` : t('header.notifications')}
-          className="relative flex size-tap items-center justify-center rounded-full hover:bg-brand-600"
+          className="print:hidden relative flex size-tap items-center justify-center rounded-full hover:bg-brand-600"
         >
           <Bell aria-hidden className="size-6" />
           {unread > 0 && (
@@ -44,7 +44,7 @@ export function AppShell({ title, children, hideNav = false, plain = false }: Pr
 
       <main className="flex-1 px-5 py-5">{children}</main>
 
-      <footer className="px-5 pt-2 pb-4 text-center text-sm text-ink-muted">{t('app.disclaimer')}</footer>
+      <footer className="print:text-black px-5 pt-2 pb-4 text-center text-sm text-ink-muted">{t('app.disclaimer')}</footer>
       {!hideNav && <BottomNav />}
     </div>
   )

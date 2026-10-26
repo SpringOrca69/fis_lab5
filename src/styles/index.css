@@ -109,3 +109,17 @@ body {
     animation: settle 0.35s ease-out both;
   }
 }
+
+/* Print / save as PDF: plain white page, no shadows. Nav, bell and controls use print:hidden. */
+@media print {
+  html,
+  body {
+    background: #fff !important;
+  }
+  * {
+    box-shadow: none !important;
+  }
+  main {
+    padding: 0 !important;
+  }
+}
