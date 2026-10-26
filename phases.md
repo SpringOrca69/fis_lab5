@@ -6,7 +6,7 @@ Source of truth for scope is `plan.md` (+ `changes.md`). This file says **what o
 | Phase | Name | Status | Approved on |
 |---|---|---|---|
 | 0 | Scaffold | approved | 2026-10-26 |
-| 1 | Foundations | todo | |
+| 1 | Foundations | review | |
 | 2 | Login + Home | todo | |
 | 3 | Scan flow | todo | |
 | 4 | Results | todo | |
