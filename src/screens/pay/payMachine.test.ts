@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest'
 import { initialState, isCameraActive, payReducer, type PayEvent, type PayState } from './payMachine'
 
 const run = (events: PayEvent[], from: PayState = initialState) => events.reduce(payReducer, from)
-const VALID = 'CDC1|A-1,A-2,A-3|15|20261231|N1'
+const VALID = 'CDC1|SUPERMARKET|A-1,A-2,A-3|15|20261231|N1'
 
 describe('payMachine', () => {
   it('routes permission results', () => {

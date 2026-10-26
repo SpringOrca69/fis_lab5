@@ -14,7 +14,7 @@ async function toSheet(page: Page, code: string) {
 }
 
 test('P4 pay, then the same code again fails; Home updates', async ({ page }) => {
-  const code = `CDC1|E-${Date.now()}-1,E-${Date.now()}-2,E-${Date.now()}-3|15|20261231|NONCE1`
+  const code = `CDC1|SUPERMARKET|E-${Date.now()}-1,E-${Date.now()}-2,E-${Date.now()}-3|15|20261231|NONCE1`
   await toSheet(page, code)
   await page.getByRole('button', { name: 'Confirm payment' }).click()
   await expect(page).toHaveURL(/\/pay\/success\//)
@@ -46,7 +46,7 @@ async function toSheetAgain(page: Page, code: string) {
 test('P4-4 offline toggle blocks confirm', async ({ page }) => {
   await page.goto('/demo')
   await page.getByRole('switch', { name: /Simulate offline/ }).click()
-  await toSheet(page, `CDC1|O-1|5|20261231|OFF1`)
+  await toSheet(page, `CDC1|SUPERMARKET|O-1|5|20261231|OFF1`)
   await page.getByRole('button', { name: 'Confirm payment' }).click()
   await expect(page).toHaveURL(/reason=network/)
   await expect(page.getByText(/Nothing was charged/)).toBeVisible()

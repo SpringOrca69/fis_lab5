@@ -88,3 +88,7 @@ Builder and Approver must load the `frontend-design` skill. Builder compares eac
 ## Phase 9: PWA (optional)
 - **Deliver:** `vite-plugin-pwa`, installable, offline shell.
 - **Tests:** P9-1 to P9-2.
+
+## Post-Phase-8 fixes (not a phase; status table unchanged)
+1. **Voucher type, not shop.** CDC vouchers are not tied to a shop: a voucher is Supermarket or Food, and a shop accepts one type (Ah Seng Minimart: Supermarket). QR payload is now `CDC1|<type>|<ids>|<amount>|<expiry>|<nonce>`; failure `wrong_merchant` renamed `wrong_voucher_type`; the `CDC-OTHER-` and `CDC-USED-` ID shortcuts are gone (type from the payload, already-used from the voucher store). Sheet shows the voucher type; new message in EN/ZH/MS/TA; `/demo` has a "Wrong voucher type" card.
+2. **Nav label.** Bottom-nav "Pay" tab is now "Accept payment" (and ZH/MS/TA equivalents). Route stays `/pay`.

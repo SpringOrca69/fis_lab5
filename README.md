@@ -28,7 +28,7 @@ First time with Playwright: `npx playwright install chromium`.
 1. Open the app on a phone (camera needs HTTPS or localhost) and open `/demo` on a laptop.
 2. On the phone, choose a language and tap "Log in with Singpass (demo)".
 3. Tap **Accept CDC Payment**, allow the camera, and scan a QR code from `/demo`.
-4. `/demo` has seven QR codes: valid $15, valid $10, expired, already used, wrong merchant, a plain link, and random text.
+4. `/demo` has seven QR codes: valid $15, valid $10, expired, already used, wrong voucher type (a Food voucher; this shop takes Supermarket vouchers only), a plain link, and random text.
 5. Scan a valid code, then Confirm. You get the success screen, and Home and the report update.
 6. Scan the same code again to see the "already used" failure ("No money was taken").
 7. On `/demo`, turn on "Simulate offline" to see the banner and the blocked payment.

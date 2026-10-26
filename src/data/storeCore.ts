@@ -59,7 +59,12 @@ export function loadState(now: Date = new Date()): AppState {
     const raw = localStorage.getItem(STORAGE_KEY)
     if (raw) {
       const parsed = JSON.parse(raw) as AppState
-      if (parsed.version === 1 && parsed.seededOn === dateKey(now) && Array.isArray(parsed.transactions)) {
+      if (
+        parsed.version === 1 &&
+        parsed.merchant?.acceptedVoucherType && // older saves without a voucher type are re-seeded
+        parsed.seededOn === dateKey(now) &&
+        Array.isArray(parsed.transactions)
+      ) {
         return parsed
       }
     }

@@ -84,7 +84,7 @@ src/
     camera.ts                   // permission state helpers (Permissions API + stored fallback)
   components/
     AppShell.tsx                // header (per-screen title, bell, language chip), bottom nav, disclaimer
-    BottomNav.tsx               // Home · Pay · History · Payout · Stall
+    BottomNav.tsx               // Home · Accept payment · History · Payout · Stall
     BigButton.tsx               // ≥56px primary action
     OfflineBanner.tsx
     EmptyState.tsx  Loading.tsx
@@ -132,10 +132,10 @@ Unauthenticated access to any route except `/` and `/demo` redirects to `/`.
 ## 4. Data model (mock)
 
 ```ts
-Merchant      { id: 'HP-M-88392', deviceId: 'HP-D-0417', name, address, bankLast4, language }
+Merchant      { id: 'HP-M-88392', deviceId: 'HP-D-0417', name, address, bankLast4, language, acceptedVoucherType: 'supermarket' | 'food' }   // Ah Seng Minimart: supermarket only
 Transaction   { id, voucherIds: string[], amount, createdAt, status: 'confirmed', payoutId }
 Payout        { id, date, expected, received?: number, status: 'scheduled' | 'paid' | 'matched' | 'not_matched' }
-Voucher       { id, value: 2 | 5 | 10, expiry, usedAt?, merchantId? }   // the "redemption DB"
+Voucher       { id, type: 'supermarket' | 'food', value: 2 | 5 | 10, expiry, usedAt?, merchantId? }   // the "redemption DB"; vouchers are not tied to a shop, a shop accepts one type
 Notification  { id, type: 'payout' | 'mismatch' | 'tip' | 'booking', createdAt, read, i18nKey, params }
 AmbassadorBooking { id, date, slot, name, phone, note, status: 'booked' }
 Settings      { soundOn, hapticsOn }
@@ -150,10 +150,10 @@ Settings      { soundOn, hapticsOn }
 
 ## 5. QR payload and validation (changes.md §8.4)
 
-Made-up format: `CDC1|<voucherId>,<voucherId>,...|<totalAmount>|<expiryYYYYMMDD>|<nonce>`
+Made-up format: `CDC1|<type>|<voucherId>,<voucherId>,...|<totalAmount>|<expiryYYYYMMDD>|<nonce>` where `<type>` is `SUPERMARKET` or `FOOD`. Voucher type comes from this field only; "already used" comes from the voucher store, never from an ID prefix.
 
 `parseQr(text)` returns one of:
-- `{ kind: 'cdc', vouchers, amount, expiry }`: valid format
+- `{ kind: 'cdc', voucherType, vouchers, amount, expiry }`: valid format
 - `{ kind: 'url', domain }`: domain shown large; "Open link" only for an allowlist (empty in POC, so never shown), plus a warning consistent with the anti-scam notice
 - `{ kind: 'not_cdc' }`: "This is not a CDC voucher code". No action offered except "Scan again".
 
@@ -163,11 +163,11 @@ Made-up format: `CDC1|<voucherId>,<voucherId>,...|<totalAmount>|<expiryYYYYMMDD>
 |---|---|
 | `expired` | QR code expired. Ask the customer to refresh it. |
 | `already_used` | This voucher was already used. |
-| `wrong_merchant` | This voucher can't be used at this shop. |
+| `wrong_voucher_type` | This type of voucher can't be used here. Please ask the customer for a Supermarket voucher. (accepted type read from the merchant setting, translated) |
 | `insufficient` | Not enough voucher value for this amount. |
 | `network` | No internet connection. Nothing was charged. Try again when online. |
 
-`/demo` renders a QR for: valid $15 (3 × $5), valid $10, expired, already used, wrong merchant, a plain URL, and random text. Each valid QR gets a fresh nonce/voucher IDs on page load so it can be redeemed once; scanning again triggers `already_used`. A "Simulate offline" toggle forces the `network` failure.
+`/demo` renders a QR for: valid $15 (3 × $5) and valid $10 (both Supermarket), expired, already used (a voucher already in the store), wrong voucher type (a Food voucher), a plain URL, and random text. Each valid QR gets a fresh nonce/voucher IDs on page load so it can be redeemed once; scanning again triggers `already_used`. A "Simulate offline" toggle forces the `network` failure.
 
 ---
 
@@ -190,7 +190,7 @@ Made-up format: `CDC1|<voucherId>,<voucherId>,...|<totalAmount>|<expiryYYYYMMDD>
 - **Blocked**: numbered steps tabbed by Chrome Android / Safari iOS / Samsung Internet; "Try again" re-checks without re-prompting in a loop; manual entry, image upload, call helper.
 - **Scanning**: full-screen camera, rear camera (`facingMode: 'environment'`), viewfinder with corner guides, hint "Point at the customer's QR code" on a semi-opaque backing. Bottom controls: Torch (labelled, on/off state, hidden if `getCapabilities().torch` is unsupported), Type code, Cancel, Help. 10s timeout hint. `aria-live="polite"`.
 - **On read**: pause the scanner at once (`paused` prop) to prevent double charges, green frame + tick (~400ms), vibrate where supported, short beep. Torch off.
-- **ResultSheet** (bottom sheet, focus moved into it, `aria-live="assertive"`): large amount, "3 vouchers × $5", "Valid until 31 Dec 2026", **Confirm payment** (primary, 56px) and **Cancel, no money taken** (secondary, spaced apart). "Details" expander holds voucher IDs and scheme. The confirm sheet is the explicit confirmation step, so no tiny "non-refundable" text is needed. Instead: "Check the amount with the customer before you confirm" in body size.
+- **ResultSheet** (bottom sheet, focus moved into it, `aria-live="assertive"`): large amount, "3 vouchers × $5", voucher type ("Supermarket voucher"), "Valid until 31 Dec 2026", **Confirm payment** (primary, 56px) and **Cancel, no money taken** (secondary, spaced apart). "Details" expander holds voucher IDs and scheme. The confirm sheet is the explicit confirmation step, so no tiny "non-refundable" text is needed. Instead: "Check the amount with the customer before you confirm" in body size.
 - Bottom nav hidden; safe-area insets applied; `viewport-fit=cover`.
 
 ### Screen 4a: Payment successful
@@ -265,7 +265,7 @@ Made-up format: `CDC1|<voucherId>,<voucherId>,...|<totalAmount>|<expiryYYYYMMDD>
   2. Deny permission → blocked screen; manual entry and image upload both complete a payment.
   3. Scan valid $15 → sheet once only (hold the camera on it for 5s: no second sheet) → Confirm → 4a with chime → Home total and last payment updated → Report shows it at the top.
   4. Scan the same QR again → 4b "already used", "No money was taken".
-  5. Expired, wrong merchant, URL and random-text QRs each show the right message.
+  5. Expired, wrong voucher type, URL and random-text QRs each show the right message.
   6. Torch toggles on Android; hidden on iPhone if unsupported.
   7. Simulate offline → banner shows; confirm is blocked with the network message.
   8. Switch to Tamil and Chinese → no empty boxes on any screen; layout does not overflow.

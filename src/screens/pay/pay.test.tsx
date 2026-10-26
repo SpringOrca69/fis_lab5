@@ -20,7 +20,7 @@ vi.mock('@yudiel/react-qr-scanner', async () => {
   ) {
     React.useImperativeHandle(ref, () => ({ getVideoElement: () => ({ readyState: 4 }), getStream: () => ({ getVideoTracks: () => [] }) }))
     return (
-      <button type="button" data-testid="fake-scanner" data-paused={String(paused)} onClick={() => onScan([{ rawValue: 'CDC1|A-1,A-2,A-3|15|20261231|N1' }])}>
+      <button type="button" data-testid="fake-scanner" data-paused={String(paused)} onClick={() => onScan([{ rawValue: 'CDC1|SUPERMARKET|A-1,A-2,A-3|15|20261231|N1' }])}>
         fake
       </button>
     )
@@ -117,7 +117,7 @@ describe('Pay flow', () => {
     await click(button(en['pay.fallback.manual']))
     const input = document.getElementById('voucher-code') as HTMLInputElement
     await act(async () => {
-      Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, 'value')!.set!.call(input, 'CDC1|A-1,A-2,A-3|15|20261231|N1')
+      Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, 'value')!.set!.call(input, 'CDC1|SUPERMARKET|A-1,A-2,A-3|15|20261231|N1')
       input.dispatchEvent(new Event('input', { bubbles: true }))
     })
     await click(button(en['pay.manual.submit']))
@@ -140,7 +140,7 @@ describe('Pay flow', () => {
     await click(button(en['pay.fallback.manual']))
     const input = document.getElementById('voucher-code') as HTMLInputElement
     await act(async () => {
-      Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, 'value')!.set!.call(input, 'CDC1|A-1,A-2,A-3|15|20261231|N1')
+      Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, 'value')!.set!.call(input, 'CDC1|SUPERMARKET|A-1,A-2,A-3|15|20261231|N1')
       input.dispatchEvent(new Event('input', { bubbles: true }))
     })
     await click(button(en['pay.manual.submit']))
@@ -163,7 +163,7 @@ describe('Pay flow', () => {
     mocks.decode.mockResolvedValueOnce(null)
     await pick()
     expect(document.body.textContent).toContain(en['pay.upload.fail'])
-    mocks.decode.mockResolvedValueOnce('CDC1|A-1|5|20261231|N2')
+    mocks.decode.mockResolvedValueOnce('CDC1|SUPERMARKET|A-1|5|20261231|N2')
     await pick()
     expect(document.querySelector('[role="dialog"]')?.textContent).toContain('$5.00')
   })

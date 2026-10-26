@@ -1,9 +1,13 @@
+export type VoucherType = 'supermarket' | 'food'
+
 export interface Merchant {
   id: string
   deviceId: string
   name: string
   address: string
   bankLast4: string
+  /** The one voucher type this shop takes. */
+  acceptedVoucherType: VoucherType
 }
 
 export interface Transaction {
@@ -25,9 +29,10 @@ export interface Payout {
   status: PayoutStatus
 }
 
-/** The mock "redemption database". Populated in Phase 3/4. */
+/** The mock "redemption database": vouchers already used. Vouchers are not tied to a shop. */
 export interface Voucher {
   id: string
+  type: VoucherType
   value: number
   expiry: string // YYYY-MM-DD
   usedAt?: string

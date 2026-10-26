@@ -7,7 +7,7 @@ import { useI18n } from '@/i18n/context'
 import { playFailure } from '@/lib/feedback'
 import type { FailureReason } from '@/lib/redeem'
 
-const REASONS: readonly FailureReason[] = ['expired', 'already_used', 'wrong_merchant', 'insufficient', 'network']
+const REASONS: readonly FailureReason[] = ['expired', 'already_used', 'wrong_voucher_type', 'insufficient', 'network']
 
 /**
  * Screen 4b: white page, red icon. After the headline, "No money was taken"
@@ -41,6 +41,11 @@ export default function PaymentFailed() {
         </h2>
         <p className="text-amount-wide mt-3 max-w-full text-amount font-bold text-ink text-balance">{t('result.fail.noMoney')}</p>
         <p className="mt-3 max-w-full text-lg break-words">{t(reason ? `result.reason.${reason}` : 'result.reason.generic')}</p>
+        {reason === 'wrong_voucher_type' && (
+          <p className="mt-1 max-w-full text-lg font-bold break-words">
+            {t('result.reason.wrong_voucher_type.ask', { type: t(`voucher.type.${state.merchant.acceptedVoucherType}`) })}
+          </p>
+        )}
       </div>
 
       <div className="mt-8 flex flex-col gap-4 pb-2">

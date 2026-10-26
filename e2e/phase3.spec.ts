@@ -19,7 +19,7 @@ async function toPay(page: Page) {
 test.describe('no camera permission yet', () => {
   test('P3-2 /demo renders 7 QR codes, public, no overflow', async ({ page }) => {
     await page.goto('/demo')
-    for (const id of ['valid15', 'valid10', 'expired', 'used', 'wrong', 'url', 'text']) {
+    for (const id of ['valid15', 'valid10', 'expired', 'used', 'wrongType', 'url', 'text']) {
       await expect(page.getByTestId(`demo-${id}`).locator('svg').first()).toBeVisible()
     }
     expect(await page.locator('[data-testid^=demo-] svg').count()).toBe(7)
@@ -63,7 +63,7 @@ test.describe('no camera permission yet', () => {
     await page.getByRole('button', { name: 'Scan again' }).click()
 
     // valid
-    await page.getByRole('textbox', { name: 'Voucher code' }).fill('CDC1|CDC-A-1,CDC-A-2,CDC-A-3|15|20261231|NONCE1')
+    await page.getByRole('textbox', { name: 'Voucher code' }).fill('CDC1|SUPERMARKET|CDC-A-1,CDC-A-2,CDC-A-3|15|20261231|NONCE1')
     await page.getByRole('button', { name: 'Check code' }).click()
     const sheet = page.getByRole('dialog')
     await expect(sheet).toBeVisible()
@@ -95,7 +95,7 @@ test.describe('no camera permission yet', () => {
     await toPay(page)
     await page.getByRole('button', { name: 'Not now' }).click()
     await page.getByRole('button', { name: 'Type the code' }).click()
-    await page.getByRole('textbox', { name: 'Voucher code' }).fill('CDC1|CDC-A-1,CDC-A-2,CDC-A-3|15|20261231|NONCE9')
+    await page.getByRole('textbox', { name: 'Voucher code' }).fill('CDC1|SUPERMARKET|CDC-A-1,CDC-A-2,CDC-A-3|15|20261231|NONCE9')
     await page.getByRole('button', { name: 'Check code' }).click()
     await expect(page.getByRole('dialog')).toBeVisible()
     expect(await page.evaluate("[...document.querySelectorAll('header')].every(e => e.hasAttribute('inert') && e.getAttribute('aria-hidden')==='true')")).toBe(true)

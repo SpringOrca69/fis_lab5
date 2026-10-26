@@ -43,3 +43,15 @@ describe('caption files', () => {
     expect(readFileSync(join(dir, f), 'utf8')).not.toContain('TODO-TRANSLATE')
   })
 })
+
+describe('voucher type wording', () => {
+  it('has the type keys in every language and no shop-bound voucher keys', () => {
+    for (const d of [en, ...Object.values(others)] as Record<string, string>[]) {
+      for (const k of ['voucher.type.supermarket', 'voucher.type.food', 'result.reason.wrong_voucher_type', 'result.reason.wrong_voucher_type.ask', 'nav.pay']) {
+        expect(d[k], k).toBeTruthy()
+      }
+      expect(Object.keys(d).some((k) => new RegExp("wrong_mer" + "chant|demo\\.[se]\\.wrong$").test(k))).toBe(false)
+    }
+    expect(enMap['nav.pay']).toBe('Accept payment')
+  })
+})

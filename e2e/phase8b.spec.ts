@@ -77,7 +77,7 @@ test('P8-3 true offline browser context: Home, Report, Help readable; confirm bl
   await page.getByRole('button', { name: en['pay.explain.notNow'] }).click()
   await page.getByRole('button', { name: en['pay.fallback.manual'] }).click()
   const s = Date.now()
-  await page.getByRole('textbox').fill(`CDC1|TO-${s}-1|5|20261231|N${s}`)
+  await page.getByRole('textbox').fill(`CDC1|SUPERMARKET|TO-${s}-1|5|20261231|N${s}`)
   await page.getByRole('button', { name: en['pay.manual.submit'] }).click()
   await page.getByRole('button', { name: en['pay.sheet.confirm'] }).click()
   await expect(page).toHaveURL(/reason=network/)

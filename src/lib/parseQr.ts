@@ -1,16 +1,20 @@
 /**
  * Validates scanned or typed text. Made-up demo format:
- * `CDC1|<voucherId>,<voucherId>,...|<totalAmount>|<expiryYYYYMMDD>|<nonce>`
+ * `CDC1|<type>|<voucherId>,<voucherId>,...|<totalAmount>|<expiryYYYYMMDD>|<nonce>`
+ * where type is SUPERMARKET or FOOD.
  * Nothing here charges anyone; it only says what the text is.
  */
+import type { VoucherType } from '@/data/types'
+
 export type QrResult =
-  | { kind: 'cdc'; vouchers: string[]; amount: number; expiry: string; nonce: string }
+  | { kind: 'cdc'; voucherType: VoucherType; vouchers: string[]; amount: number; expiry: string; nonce: string }
   | { kind: 'url'; domain: string }
   | { kind: 'not_cdc' }
 
 /** Domains for which "Open link" may be offered. Empty in the POC, so never shown. */
 export const URL_ALLOWLIST: readonly string[] = []
 
+const TYPES: Record<string, VoucherType> = { SUPERMARKET: 'supermarket', FOOD: 'food' }
 const ID = /^[A-Za-z0-9-]{1,40}$/
 const NONCE = /^[A-Za-z0-9]{1,24}$/
 
@@ -30,8 +34,10 @@ export function parseQr(text: string | null | undefined): QrResult {
 
   if (raw.startsWith('CDC1|')) {
     const parts = raw.split('|')
-    if (parts.length !== 5) return { kind: 'not_cdc' }
-    const [, idList, amountText, expiryText, nonce] = parts
+    if (parts.length !== 6) return { kind: 'not_cdc' }
+    const [, typeText, idList, amountText, expiryText, nonce] = parts
+    const voucherType = TYPES[typeText]
+    if (!voucherType) return { kind: 'not_cdc' }
     const vouchers = idList.split(',')
     if (vouchers.length === 0 || !vouchers.every((v) => ID.test(v))) return { kind: 'not_cdc' }
     if (!/^\d{1,4}(\.\d{1,2})?$/.test(amountText)) return { kind: 'not_cdc' }
@@ -39,7 +45,7 @@ export function parseQr(text: string | null | undefined): QrResult {
     if (!(amount > 0)) return { kind: 'not_cdc' }
     const expiry = validDate(expiryText)
     if (!expiry || !NONCE.test(nonce)) return { kind: 'not_cdc' }
-    return { kind: 'cdc', vouchers, amount, expiry, nonce }
+    return { kind: 'cdc', voucherType, vouchers, amount, expiry, nonce }
   }
 
   if (/^https?:\/\//i.test(raw)) {
