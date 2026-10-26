@@ -6,7 +6,89 @@
 @import '@fontsource/noto-sans-tamil/700.css';
 @import 'tailwindcss';
 
+/*
+ * HeartPay design tokens. Defined once here; every later phase reuses them.
+ * Base size is 18px (html font-size), so all rem values scale with the
+ * user's system text size. Brand colours are sampled from the Figma
+ * screens: deep teal headers/buttons, pale mint highlights.
+ */
+@theme {
+  /* Brand (Figma teal + mint) */
+  --color-brand-900: #0b3b37;
+  --color-brand-700: #12544e; /* primary buttons, headers. White on it: 9.6:1 */
+  --color-brand-600: #1a6b63;
+  --color-brand-200: #bfe9dd;
+  --color-brand-100: #d6f1e8;
+  --color-brand-50: #eef8f4;
+
+  /* Neutrals */
+  --color-canvas: #f2f6f5;
+  --color-surface: #ffffff;
+  --color-ink: #14201f; /* on canvas: 15:1 */
+  --color-ink-muted: #46585a; /* on white: 7.4:1 */
+  --color-line: #c3d2cf;
+
+  /* Status: text colour on its own tint is >= 4.5:1 (AA). Always pair with icon + words. */
+  --color-success: #166534;
+  --color-success-tint: #dcf2e3;
+  --color-danger: #b42318;
+  --color-danger-tint: #fde8e6;
+  --color-warning: #8a4b00;
+  --color-warning-tint: #fff1cc;
+  --color-focus: #0b5fd3;
+
+  /* Type scale (rem, 1rem = 18px) */
+  --text-sm: 0.889rem; /* 16px, the minimum anywhere */
+  --text-sm--line-height: 1.4;
+  --text-base: 1rem; /* 18px body */
+  --text-base--line-height: 1.5;
+  --text-lg: 1.222rem; /* 22px */
+  --text-lg--line-height: 1.35;
+  --text-title: 1.444rem; /* 26px screen titles */
+  --text-title--line-height: 1.25;
+  --text-amount: 2.25rem; /* 40px money */
+  --text-amount--line-height: 1.1;
+  --text-amount-xl: 2.667rem; /* 48px hero money */
+  --text-amount-xl--line-height: 1.05;
+
+  /* Tap targets */
+  --spacing-tap: 2.667rem; /* 48px minimum */
+  --spacing-tap-pay: 3.111rem; /* 56px payment actions */
+  --spacing-tile: 3.556rem; /* 64px language tiles */
+
+  /* Radii */
+  --radius-control: 0.75rem;
+  --radius-card: 1.125rem;
+
+  --shadow-card: 0 1px 2px rgb(11 59 55 / 0.08), 0 2px 8px rgb(11 59 55 / 0.06);
+}
+
 html {
   font-size: 18px;
   font-family: 'Noto Sans', 'Noto Sans SC', 'Noto Sans Tamil', system-ui, sans-serif;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  background: var(--color-canvas);
+  color: var(--color-ink);
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+:focus-visible {
+  outline: 3px solid var(--color-focus);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
