@@ -6,6 +6,8 @@ import Login from './screens/Login'
 import Pay from './screens/Pay'
 import PaymentFailed from './screens/PaymentFailed'
 import PaymentSuccess from './screens/PaymentSuccess'
+import Payouts from './screens/Payouts'
+import Report from './screens/Report'
 import Placeholder from './screens/Placeholder'
 
 /**
@@ -23,8 +25,9 @@ export const router = createBrowserRouter([
       { path: '/pay', element: <Pay /> },
       { path: '/pay/success/:txId', element: <PaymentSuccess /> },
       { path: '/pay/failed', element: <PaymentFailed /> },
-      { path: '/history', element: <Placeholder titleKey="nav.history" /> },
-      { path: '/payouts', element: <Placeholder titleKey="nav.payout" /> },
+      { path: '/history', element: <Report /> },
+      { path: '/history/:date', element: <Report /> },
+      { path: '/payouts', element: <Payouts /> },
       { path: '/stall', element: <Placeholder titleKey="nav.stall" /> },
       { path: '/notifications', element: <Placeholder titleKey="header.notifications" /> },
     ],
