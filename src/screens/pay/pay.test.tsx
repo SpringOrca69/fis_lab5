@@ -133,6 +133,23 @@ describe('Pay flow', () => {
     expect(dialog.textContent).toContain('A-1, A-2, A-3')
   })
 
+  it('Cancel closes the sheet and focus is not left on body', async () => {
+    mocks.permission = 'denied'
+    await mount(<Pay />)
+    await flush()
+    await click(button(en['pay.fallback.manual']))
+    const input = document.getElementById('voucher-code') as HTMLInputElement
+    await act(async () => {
+      Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, 'value')!.set!.call(input, 'CDC1|A-1,A-2,A-3|15|20261231|N1')
+      input.dispatchEvent(new Event('input', { bubbles: true }))
+    })
+    await click(button(en['pay.manual.submit']))
+    await click(button(en['pay.sheet.cancel']))
+    await flush()
+    expect(document.querySelector('[role="dialog"]')).toBeNull()
+    expect(document.activeElement).not.toBe(document.body)
+  })
+
   it('image upload reaches the sheet; failure shows a message', async () => {
     mocks.permission = 'denied'
     await mount(<Pay />)

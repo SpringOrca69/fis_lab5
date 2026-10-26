@@ -13,10 +13,31 @@ interface Props {
 export function BottomPanel({ labelledBy, children }: Props) {
   const ref = useRef<HTMLDivElement>(null)
   useEffect(() => {
+    const opener = document.activeElement as HTMLElement | null
+    // The page behind the dialog (header, bell) must not be reachable or announced.
+    const behind = [...document.querySelectorAll<HTMLElement>('header')]
+    behind.forEach((el) => {
+      el.setAttribute('inert', '')
+      el.setAttribute('aria-hidden', 'true')
+    })
     ref.current?.focus()
+    return () => {
+      behind.forEach((el) => {
+        el.removeAttribute('inert')
+        el.removeAttribute('aria-hidden')
+      })
+      // Restore focus to the opener; if it was removed, use the first bottom control (Type code)
+      // or the first control on the page.
+      const target =
+        opener && opener !== document.body && opener.isConnected
+          ? opener
+          : (document.querySelector<HTMLElement>('[data-return-focus]') ??
+            document.querySelector<HTMLElement>('main input, main button, main a[href]'))
+      target?.focus()
+    }
   }, [])
   return (
-    <div className="fixed inset-0 z-40 flex items-end justify-center bg-black/50">
+    <div className="fixed inset-0 z-40 flex items-end justify-center bg-black/70">
       <div
         ref={ref}
         role="dialog"

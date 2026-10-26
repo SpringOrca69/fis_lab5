@@ -36,13 +36,14 @@ function mapError(e: IScannerError): 'permission-denied' | 'no-camera' | 'other'
   return 'other'
 }
 
-function CtrlButton({ onClick, Icon, label, pressed, hidden }: { onClick: () => void; Icon: typeof X; label: string; pressed?: boolean; hidden?: boolean }) {
+function CtrlButton({ onClick, Icon, label, pressed, hidden, returnFocus }: { returnFocus?: boolean; onClick: () => void; Icon: typeof X; label: string; pressed?: boolean; hidden?: boolean }) {
   if (hidden) return null
   return (
     <button
       type="button"
       onClick={onClick}
       aria-pressed={pressed}
+      data-return-focus={returnFocus ? '' : undefined}
       className={cn(
         'flex min-h-tap-pay min-w-0 flex-1 flex-col items-center justify-center gap-0.5 rounded-control px-1 py-1.5 text-sm font-bold text-white',
         pressed ? 'bg-white text-brand-900' : 'bg-white/15 hover:bg-white/25',
@@ -176,7 +177,7 @@ export function CameraView(p: Props) {
             label={`${t('pay.torch')}: ${torchOn ? t('pay.torch.on') : t('pay.torch.off')}`}
             pressed={torchOn}
           />
-          <CtrlButton onClick={p.onManual} Icon={Keyboard} label={t('pay.typeCode')} />
+          <CtrlButton returnFocus onClick={p.onManual} Icon={Keyboard} label={t('pay.typeCode')} />
           <CtrlButton onClick={p.onHelp} Icon={CircleHelp} label={t('pay.help')} />
           <CtrlButton onClick={p.onCancel} Icon={X} label={t('pay.cancel')} />
         </div>
