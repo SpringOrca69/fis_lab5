@@ -1,6 +1,6 @@
 import { CameraOff, TriangleAlert } from 'lucide-react'
-import { useCallback, useEffect, useReducer, useState } from 'react'
-import { Link, useNavigate } from 'react-router'
+import { useCallback, useEffect, useReducer, useRef, useState } from 'react'
+import { useNavigate } from 'react-router'
 import { AppShell } from '@/components/AppShell'
 import { CameraBlocked } from '@/components/scan/CameraBlocked'
 import { Fallbacks } from '@/components/scan/Fallbacks'
@@ -14,18 +14,37 @@ import { useStore } from '@/data/storeContext'
 import { useI18n } from '@/i18n/context'
 import { checkPermission, requestCamera } from '@/lib/camera'
 import { decodeImage } from '@/lib/decodeImage'
+import { isOnline } from '@/lib/offline'
+import { buildRedemption, redeem, type Cdc } from '@/lib/redeem'
 import { initialState, isCameraActive, payReducer } from './pay/payMachine'
 
 /**
  * Screen 3: Accept CDC payment. A state machine over the scan components
- * (see pay/payMachine.ts). Confirm is a placeholder until Phase 4.
+ * (see pay/payMachine.ts). Confirm runs redeem() once and goes to 4a or 4b.
  */
 export default function Pay() {
   const { t } = useI18n()
-  const { state: store } = useStore()
+  const { state: store, dispatch: storeDispatch } = useStore()
   const navigate = useNavigate()
   const [state, dispatch] = useReducer(payReducer, initialState)
   const [busy, setBusy] = useState(false)
+  const confirmed = useRef(false)
+
+  /** One tap, one charge: the ref stops a double tap from redeeming twice. */
+  const confirmPayment = (code: Cdc) => {
+    if (confirmed.current) return
+    confirmed.current = true
+    dispatch({ type: 'confirm' })
+    const now = new Date()
+    const outcome = redeem({ code, vouchers: store.vouchers, online: isOnline(), now })
+    if (!outcome.ok) {
+      navigate(`/pay/failed?reason=${outcome.reason}`, { replace: true })
+      return
+    }
+    const { transaction, vouchers } = buildRedemption(code, store.merchant.id, now)
+    storeDispatch({ type: 'redeem', transaction, vouchers })
+    navigate(`/pay/success/${transaction.id}`, { replace: true })
+  }
 
   // checkingPermission: look up the permission without prompting.
   useEffect(() => {
@@ -93,7 +112,7 @@ export default function Pay() {
         {state.name === 'not_cdc' && <MessagePanel variant={{ kind: 'not_cdc' }} onScanAgain={() => dispatch({ type: 'scanAgain' })} />}
         {state.name === 'url' && <MessagePanel variant={{ kind: 'url', domain: state.domain }} onScanAgain={() => dispatch({ type: 'scanAgain' })} />}
         {state.name === 'sheet' && (
-          <ResultSheet result={state.result} onConfirm={() => dispatch({ type: 'confirm' })} onCancel={() => dispatch({ type: 'scanAgain' })} />
+          <ResultSheet result={state.result} onConfirm={() => confirmPayment(state.result)} onCancel={() => dispatch({ type: 'scanAgain' })} />
         )}
       </CameraView>
     )
@@ -165,14 +184,9 @@ export default function Pay() {
       break
     case 'confirming':
       body = (
-        <section className="rounded-card bg-surface p-5 shadow-card">
-          <p role="status" className="text-base">
-            {t('pay.confirm.placeholder')}
-          </p>
-          <Link to="/home" className="mt-4 flex min-h-tap-pay items-center justify-center rounded-control bg-brand-700 px-4 text-lg font-bold text-white">
-            {t('nav.home')}
-          </Link>
-        </section>
+        <p role="status" aria-live="polite" className="text-lg font-bold">
+          {t('pay.confirming')}
+        </p>
       )
       break
     case 'sheet':
@@ -189,7 +203,7 @@ export default function Pay() {
     <AppShell title={t('pay.title')} hideNav={state.name === 'sheet' || state.name === 'not_cdc' || state.name === 'url'}>
       <div className="flex flex-col gap-4">{body}</div>
       {state.name === 'sheet' && (
-        <ResultSheet result={state.result} onConfirm={() => dispatch({ type: 'confirm' })} onCancel={() => dispatch({ type: 'scanAgain' })} />
+        <ResultSheet result={state.result} onConfirm={() => confirmPayment(state.result)} onCancel={() => dispatch({ type: 'scanAgain' })} />
       )}
       {state.name === 'not_cdc' && <MessagePanel variant={{ kind: 'not_cdc' }} onScanAgain={() => dispatch({ type: 'scanAgain' })} />}
       {state.name === 'url' && <MessagePanel variant={{ kind: 'url', domain: state.domain }} onScanAgain={() => dispatch({ type: 'scanAgain' })} />}

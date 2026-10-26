@@ -4,6 +4,8 @@ import Home from './screens/Home'
 import Demo from './screens/Demo'
 import Login from './screens/Login'
 import Pay from './screens/Pay'
+import PaymentFailed from './screens/PaymentFailed'
+import PaymentSuccess from './screens/PaymentSuccess'
 import Placeholder from './screens/Placeholder'
 
 /**
@@ -19,6 +21,8 @@ export const router = createBrowserRouter([
     children: [
       { path: '/home', element: <Home /> },
       { path: '/pay', element: <Pay /> },
+      { path: '/pay/success/:txId', element: <PaymentSuccess /> },
+      { path: '/pay/failed', element: <PaymentFailed /> },
       { path: '/history', element: <Placeholder titleKey="nav.history" /> },
       { path: '/payouts', element: <Placeholder titleKey="nav.payout" /> },
       { path: '/stall', element: <Placeholder titleKey="nav.stall" /> },
