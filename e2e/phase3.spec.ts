@@ -85,10 +85,9 @@ test.describe('no camera permission yet', () => {
     expect(await noHScroll(page)).toBe(true)
     await page.screenshot({ path: `${SHOTS}/sheet.png` })
 
-    // Confirm is a placeholder: no money, no transaction
+    // Phase 4: Confirm now redeems and goes to the success screen
     await confirm.click()
-    await expect(page.getByText(/No money was taken/)).toBeVisible()
-    await expect(page).toHaveURL(/\/pay$/)
+    await expect(page).toHaveURL(/\/pay\/success\//)
   })
 
   test('P3-4 loop-1: header inert behind sheet, focus restored on cancel', async ({ page }) => {

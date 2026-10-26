@@ -97,6 +97,20 @@ describe('confirm flow', () => {
     expect(storedTxCount()).toBe(before + 1)
   })
 
+  it('P4-6 muted setting is passed to the chime (soundOn false)', async () => {
+    await mount('/pay')
+    const saved = JSON.parse(localStorage.getItem('heartpay:v1')!)
+    saved.settings = { ...saved.settings, soundOn: false }
+    localStorage.setItem('heartpay:v1', JSON.stringify(saved))
+    await act(async () => root.unmount())
+    host.remove()
+    await mount('/pay')
+    await payWith(VALID)
+    await flush()
+    expect(chime.success).toHaveBeenCalledTimes(1)
+    expect(chime.success.mock.calls[0][0].soundOn).toBe(false)
+  })
+
   it('P4-3 the same code twice gives already_used', async () => {
     await mount('/pay')
     await payWith(VALID)
