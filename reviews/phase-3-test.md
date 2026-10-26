@@ -30,3 +30,18 @@ Screenshots: `reviews/screenshots/phase-3/` (demo, explainer, fallbacks, not-cdc
 
 ## Verdict: PASS WITH HUMAN CHECKS
 All A and R tests pass. P3-6 to P3-9 need a real iPhone and Android.
+
+## Retest after loop-1 fixes (commit ff6f31b)
+Run on `phase-3`: `npm run lint` clean; `npm run test` 8 files, 73 tests pass (new: Cancel closes sheet and focus not on body); `npm run build` pass (only chunk-size warning); `npm run e2e` 17/17 pass (full suite, which the builder had skipped).
+
+| Check | Result | Evidence |
+|---|---|---|
+| Header inert and aria-hidden while sheet open | pass | New e2e "P3-4 loop-1": with the sheet open every `header` has `inert` and `aria-hidden=true`; both removed after "Cancel, no money taken". |
+| Focus restored on sheet close | pass | e2e: after cancel the dialog is gone and `document.activeElement` is not `body`; Vitest covers the same. |
+| Darker backdrop | pass | Code: `bg-black/70` in BottomPanel. |
+| Scanner path still works | pass | Existing granted-camera e2e (fake camera, controls, Type code, Use camera, Cancel to /home) passes; added assertion that no header is inert while scanning. |
+| Earlier minor notes (focus restore, header faintly visible) | resolved | See above. |
+
+Test file changed: `e2e/phase3.spec.ts` only. No app code changed. P3-6 to P3-9 remain for a human (steps above).
+
+## Retest verdict: PASS WITH HUMAN CHECKS

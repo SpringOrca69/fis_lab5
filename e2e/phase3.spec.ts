@@ -91,6 +91,21 @@ test.describe('no camera permission yet', () => {
     await expect(page).toHaveURL(/\/pay$/)
   })
 
+  test('P3-4 loop-1: header inert behind sheet, focus restored on cancel', async ({ page }) => {
+    await logIn(page)
+    await toPay(page)
+    await page.getByRole('button', { name: 'Not now' }).click()
+    await page.getByRole('button', { name: 'Type the code' }).click()
+    await page.getByRole('textbox', { name: 'Voucher code' }).fill('CDC1|CDC-A-1,CDC-A-2,CDC-A-3|15|20261231|NONCE9')
+    await page.getByRole('button', { name: 'Check code' }).click()
+    await expect(page.getByRole('dialog')).toBeVisible()
+    expect(await page.evaluate("[...document.querySelectorAll('header')].every(e => e.hasAttribute('inert') && e.getAttribute('aria-hidden')==='true')")).toBe(true)
+    await page.getByRole('button', { name: 'Cancel, no money taken' }).click()
+    await expect(page.getByRole('dialog')).toHaveCount(0)
+    expect(await page.evaluate("[...document.querySelectorAll('header')].some(e => e.hasAttribute('inert') || e.hasAttribute('aria-hidden'))")).toBe(false)
+    expect(await page.evaluate('document.activeElement !== document.body')).toBe(true)
+  })
+
   test('P3-5 image upload of a /demo QR reaches the sheet; bad image fails kindly', async ({ page, browser }) => {
     // screenshot a real demo QR, then upload it
     const demo = await browser.newPage({ viewport: { width: 390, height: 844 } })
@@ -130,6 +145,7 @@ test.describe('fake camera, permission granted', () => {
       expect((await b.boundingBox())!.y).toBeGreaterThan(844 * 0.7)
     }
     await expect(page.getByText('Scanning…')).toBeVisible({ timeout: 10000 })
+    expect(await page.evaluate("[...document.querySelectorAll('header')].some(e => e.hasAttribute('inert'))")).toBe(false)
     await page.screenshot({ path: `${SHOTS}/scanning.png` })
     await page.getByRole('button', { name: 'Type code' }).click()
     await expect(page.getByRole('heading', { name: 'Type the voucher code' })).toBeVisible()
