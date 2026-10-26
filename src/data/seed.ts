@@ -4,6 +4,8 @@ import type { AppState, Payout, Transaction } from './types'
 export const MISMATCH_DAYS_AGO = 3
 export const MISMATCH_GAP = 5
 export const HISTORY_DAYS = 14
+/** Already used in the mock redemption store; the "Already used" demo QR points at it. */
+export const DEMO_USED_VOUCHER_ID = 'CDC-DEMO-SPENT-0001'
 
 /** Minutes before "now" for today's payments, newest first. */
 const TODAY: { minsAgo: number; amount: number }[] = [
@@ -110,10 +112,21 @@ export function createSeed(now: Date = new Date()): AppState {
       name: 'Ah Seng Minimart',
       address: 'Blk 123 Toa Payoh Lor 4',
       bankLast4: '1234',
+      acceptedVoucherType: 'supermarket',
     },
     transactions,
     payouts,
-    vouchers: [],
+    // One voucher already used, so the "Already used" demo code is decided by the store.
+    vouchers: [
+      {
+        id: DEMO_USED_VOUCHER_ID,
+        type: 'supermarket',
+        value: 5,
+        expiry: '2026-12-31',
+        usedAt: addDays(today, -1).toISOString(),
+        merchantId: 'HP-M-88392',
+      },
+    ],
     notifications: [
       {
         id: 'N-1',

@@ -36,7 +36,7 @@ export default function Pay() {
     confirmed.current = true
     dispatch({ type: 'confirm' })
     const now = new Date()
-    const outcome = redeem({ code, vouchers: store.vouchers, online: isOnline(), now })
+    const outcome = redeem({ code, vouchers: store.vouchers, online: isOnline(), accepted: store.merchant.acceptedVoucherType, now })
     if (!outcome.ok) {
       navigate(`/pay/failed?reason=${outcome.reason}`, { replace: true })
       return

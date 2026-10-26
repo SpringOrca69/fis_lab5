@@ -4,8 +4,9 @@ import { parseQr } from './parseQr'
 
 describe('parseQr', () => {
   it('parses a valid CDC payload', () => {
-    expect(parseQr('CDC1|A-1,A-2,A-3|15|20261231|N0NCE')).toEqual({
+    expect(parseQr('CDC1|SUPERMARKET|A-1,A-2,A-3|15|20261231|N0NCE')).toEqual({
       kind: 'cdc',
+      voucherType: 'supermarket',
       vouchers: ['A-1', 'A-2', 'A-3'],
       amount: 15,
       expiry: '2026-12-31',
@@ -13,7 +14,11 @@ describe('parseQr', () => {
     })
   })
   it('trims whitespace', () => {
-    expect(parseQr('  CDC1|A|5|20261231|X1 \n').kind).toBe('cdc')
+    expect(parseQr('  CDC1|FOOD|A|5|20261231|X1 \n').kind).toBe('cdc')
+  })
+  it('reads the voucher type from the payload', () => {
+    expect(parseQr('CDC1|FOOD|A|5|20261231|X1')).toMatchObject({ kind: 'cdc', voucherType: 'food' })
+    expect(parseQr('CDC1|SUPERMARKET|A|5|20261231|X1')).toMatchObject({ kind: 'cdc', voucherType: 'supermarket' })
   })
   it('returns the domain for URLs', () => {
     expect(parseQr('https://evil.example.com/pay?x=1')).toEqual({ kind: 'url', domain: 'evil.example.com' })
@@ -25,16 +30,21 @@ describe('parseQr', () => {
     expect(parseQr(undefined)).toEqual({ kind: 'not_cdc' })
   })
   it.each([
-    'CDC1|A|5|20261231',
-    'CDC1|A|5|20261231|N|extra',
-    'CDC1||5|20261231|N',
-    'CDC1|A,,B|5|20261231|N',
-    'CDC1|A|abc|20261231|N',
-    'CDC1|A|0|20261231|N',
-    'CDC1|A|5|20261331|N',
-    'CDC1|A|5|2026-12-31|N',
-    'CDC1|A B|5|20261231|N',
-    'CDC1|A|5|20261231|',
+    'CDC1|A|5|20261231|N',
+    'CDC1|supermarket|A|5|20261231|N',
+    'CDC1|DRINKS|A|5|20261231|N',
+    'CDC1|SUPERMARKET||5|20261231|N',
+    'CDC1|A-1,A-2|15|20261231|N|x',
+    'CDC1|FOOD|A|5|20261231',
+    'CDC1|FOOD|A|5|20261231|N|extra',
+    'CDC1|FOOD||5|20261231|N',
+    'CDC1|FOOD|A,,B|5|20261231|N',
+    'CDC1|FOOD|A|abc|20261231|N',
+    'CDC1|FOOD|A|0|20261231|N',
+    'CDC1|FOOD|A|5|20261331|N',
+    'CDC1|FOOD|A|5|2026-12-31|N',
+    'CDC1|FOOD|A B|5|20261231|N',
+    'CDC1|FOOD|A|5|20261231|',
     'ftp://example.com',
     'https://',
   ])('treats malformed %s as not CDC', (s) => {

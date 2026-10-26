@@ -67,7 +67,7 @@ async function payWith(code: string) {
   await click(button(en['pay.sheet.confirm']))
 }
 
-const VALID = 'CDC1|R-1,R-2,R-3|15|20261231|N1'
+const VALID = 'CDC1|SUPERMARKET|R-1,R-2,R-3|15|20261231|N1'
 const storedTxCount = () => (JSON.parse(localStorage.getItem('heartpay:v1')!).transactions as unknown[]).length
 
 beforeEach(() => {
@@ -134,7 +134,7 @@ describe('confirm flow', () => {
     expect(document.body.textContent).toContain('Nothing was charged')
     expect(document.body.textContent).toContain('No money was taken')
     const stored = JSON.parse(localStorage.getItem('heartpay:v1')!)
-    expect(stored.vouchers).toHaveLength(0)
+    expect(stored.vouchers.map((v: { id: string }) => v.id)).not.toContain('R-1')
   })
 })
 
@@ -155,5 +155,30 @@ describe('failed screen', () => {
     await mount('/pay/failed?reason=zzz')
     await flush()
     expect(document.body.textContent).toContain(en['result.reason.generic'])
+  })
+
+  it('shows the voucher type on the sheet', async () => {
+    await mount('/pay')
+    await flush()
+    await click(button(en['pay.fallback.manual']))
+    const input = document.getElementById('voucher-code') as HTMLInputElement
+    await act(async () => {
+      Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, 'value')!.set!.call(input, VALID)
+      input.dispatchEvent(new Event('input', { bubbles: true }))
+    })
+    await click(button(en['pay.manual.submit']))
+    expect(document.body.textContent).toContain('Supermarket voucher')
+  })
+
+  it('a Food voucher fails with wrong_voucher_type and names the accepted type; nothing stored', async () => {
+    await mount('/pay')
+    const n = storedTxCount()
+    await payWith('CDC1|FOOD|F-1|5|20261231|N9')
+    await flush()
+    const text = document.body.textContent!
+    expect(text).toContain('No money was taken')
+    expect(text).toContain("This type of voucher can't be used here.")
+    expect(text).toContain('Please ask the customer for a Supermarket voucher.')
+    expect(storedTxCount()).toBe(n)
   })
 })

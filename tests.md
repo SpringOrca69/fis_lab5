@@ -58,9 +58,9 @@ A phase passes when every A and R test is green and every H test is either passe
 ## Phase 4
 | ID | Type | Check |
 |---|---|---|
-| P4-1 | A | `redeem`: success plus each failure (expired, already_used, wrong_merchant, insufficient, network) |
+| P4-1 | A | `redeem`: success plus each failure (expired, already_used, wrong_voucher_type, insufficient, network). Voucher type comes from the payload; already_used comes from the voucher store |
 | P4-2 | A | Confirm adds one transaction; Home and Report update |
-| P4-3 | A | Scanning the same QR twice gives `already_used` and a failure screen |
+| P4-3 | A | Scanning the same QR twice gives `already_used` and a failure screen; a Food voucher gives `wrong_voucher_type` with "Please ask the customer for a Supermarket voucher." |
 | P4-4 | A | Offline toggle blocks confirm and shows "Nothing was charged" |
 | P4-5 | A | Failure screen shows "No money was taken" as largest text |
 | P4-6 | A | Mute setting prevents the chime |
@@ -126,7 +126,7 @@ Load `frontend-design`. Take Playwright screenshots at 390px of each new screen 
 2. Deny permission → blocked screen; manual entry and image upload complete a payment.
 3. Scan valid $15 → one sheet only → Confirm → success + chime → Home and Report updated.
 4. Scan the same QR again → "already used", "No money was taken".
-5. Expired, wrong merchant, URL and random text each show the right message.
+5. Expired, wrong voucher type, URL and random text each show the right message.
 6. Torch works on Android; hidden on iPhone if unsupported.
 7. Simulate offline → banner; confirm blocked.
 8. Tamil and Chinese: no empty boxes, no overflow.

@@ -31,6 +31,9 @@ export function ResultSheet({ result, onConfirm, onCancel }: Props) {
       </p>
       <p className="mt-1 text-amount-xl font-bold text-brand-900">{formatCurrency(result.amount, lang)}</p>
       <p className="text-lg font-bold">{breakdown}</p>
+      <p className="mt-1 inline-flex rounded-full bg-brand-100 px-3 py-1 text-base font-bold text-brand-900">
+        {t('pay.sheet.type', { type: t(`voucher.type.${result.voucherType}`) })}
+      </p>
       <p className="mt-1 text-base text-ink-muted">{t('pay.sheet.valid', { date: formatDate(result.expiry, lang) })}</p>
       <p className="mt-3 rounded-control bg-warning-tint px-3 py-2 text-base text-warning">{t('pay.sheet.check')}</p>
 
@@ -61,7 +64,9 @@ export function ResultSheet({ result, onConfirm, onCancel }: Props) {
       </button>
       {open && (
         <dl id="sheet-details" className="rounded-control bg-canvas px-3 py-2 text-base">
-          <dt className="text-sm text-ink-muted">{t('pay.sheet.voucherCodes')}</dt>
+          <dt className="text-sm text-ink-muted">{t('pay.sheet.typeLabel')}</dt>
+          <dd className="font-bold">{t('pay.sheet.type', { type: t(`voucher.type.${result.voucherType}`) })}</dd>
+          <dt className="mt-2 text-sm text-ink-muted">{t('pay.sheet.voucherCodes')}</dt>
           <dd className="break-all font-bold">{result.vouchers.join(', ')}</dd>
           <dt className="mt-2 text-sm text-ink-muted">{t('pay.sheet.scheme')}</dt>
           <dd className="font-bold">{t('pay.scheme')}</dd>

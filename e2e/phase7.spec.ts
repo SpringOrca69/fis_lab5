@@ -66,7 +66,7 @@ for (const lang of LANGS) {
     await check(page, lang, '04-pay-fallback')
     const stamp = Date.now()
     await page.getByRole('button', { name: T['pay.fallback.manual'] }).click()
-    await page.getByRole('textbox').fill(`CDC1|P7-${lang}-${stamp}-1,P7-${lang}-${stamp}-2,P7-${lang}-${stamp}-3|15|20261231|N${stamp}`)
+    await page.getByRole('textbox').fill(`CDC1|SUPERMARKET|P7-${lang}-${stamp}-1,P7-${lang}-${stamp}-2,P7-${lang}-${stamp}-3|15|20261231|N${stamp}`)
     await check(page, lang, '05-pay-manual')
     await page.getByRole('button', { name: T['pay.manual.submit'] }).click()
     await page.waitForTimeout(500)

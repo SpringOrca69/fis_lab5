@@ -10,7 +10,7 @@ Device and OS version: ____________
 - [ ] 2. Deny permission: blocked screen shows. Manual entry and image upload each complete a payment.
 - [ ] 3. Scan valid $15: one sheet only (hold the camera on it for 5 seconds), Confirm, success screen with chime, Home and Report updated.
 - [ ] 4. Scan the same QR again: "already used" and "No money was taken".
-- [ ] 5. Expired, wrong merchant, URL and random-text QR codes each show the right message.
+- [ ] 5. Expired, wrong voucher type, URL and random-text QR codes each show the right message.
 - [ ] 6. Torch works on Android. Hidden on iPhone if unsupported.
 - [ ] 7. Simulate offline: banner shows and confirm is blocked.
 - [ ] 8. Tamil and Chinese: no empty boxes, no overflow.
@@ -26,7 +26,7 @@ Device and OS version: ____________
 - [ ] 2. Deny permission: blocked screen shows. Manual entry and image upload each complete a payment.
 - [ ] 3. Scan valid $15: one sheet only (hold the camera on it for 5 seconds), Confirm, success screen with chime, Home and Report updated.
 - [ ] 4. Scan the same QR again: "already used" and "No money was taken".
-- [ ] 5. Expired, wrong merchant, URL and random-text QR codes each show the right message.
+- [ ] 5. Expired, wrong voucher type, URL and random-text QR codes each show the right message.
 - [ ] 6. Torch works on Android. Hidden on iPhone if unsupported.
 - [ ] 7. Simulate offline: banner shows and confirm is blocked.
 - [ ] 8. Tamil and Chinese: no empty boxes, no overflow.
