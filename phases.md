@@ -10,11 +10,13 @@ Source of truth for scope is `plan.md` (+ `changes.md`). This file says **what o
 | 2 | Login + Home | approved | 2026-10-26 |
 | 3 | Scan flow | approved | 2026-10-26 |
 | 4 | Results | approved | 2026-10-26 |
-| 5 | Money screens | needs-human | |
+| 5 | Money screens | approved | 2026-10-26 |
 | 6 | Support + profile | todo | |
 | 7 | Translations | todo | |
 | 8 | Hardening | todo | |
 | 9 | PWA (optional) | todo | |
+
+**Deferred human check (P5-7 share sheet + CSV, passed 2026-10-26):** user confirmed on phone.
 
 **Deferred human check (P4-8 chime/vibration, passed 2026-10-26):** user confirmed.
 
