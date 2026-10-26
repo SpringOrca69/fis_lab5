@@ -39,7 +39,7 @@ export default function PaymentFailed() {
         <h2 ref={headingRef} tabIndex={-1} className="mt-5 max-w-full text-title font-bold text-danger outline-none break-words text-balance">
           {t('result.fail.title')}
         </h2>
-        <p className="text-amount-wide mt-3 max-w-full text-amount font-bold text-ink break-words text-balance">{t('result.fail.noMoney')}</p>
+        <p className="text-amount-wide mt-3 max-w-full text-amount font-bold text-ink text-balance">{t('result.fail.noMoney')}</p>
         <p className="mt-3 max-w-full text-lg break-words">{t(reason ? `result.reason.${reason}` : 'result.reason.generic')}</p>
       </div>
 
