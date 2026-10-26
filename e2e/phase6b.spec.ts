@@ -37,7 +37,7 @@ test('help entry points all land on /help', async ({ page }) => {
 })
 
 test('vibration off: success screen does not vibrate; on: it does', async ({ page }) => {
-  await page.addInitScript('window.__v = 0; navigator.vibrate = () => { window.__v++; return true }')
+  await page.addInitScript('Object.defineProperty(navigator, "userActivation", { value: { hasBeenActive: true } }); window.__v = 0; navigator.vibrate = () => { window.__v++; return true }')
   await login(page)
   const id = await page.evaluate(() => JSON.parse(localStorage.getItem('heartpay:v1')!).transactions[0].id)
   for (const on of [false, true]) {

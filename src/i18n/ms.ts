@@ -172,6 +172,7 @@ export const ms: Dictionary = {
   'result.reason.insufficient': 'Nilai baucar tidak cukup untuk jumlah ini.',
   'result.reason.network': 'Tiada sambungan internet. Tiada wang dicaj. Cuba lagi apabila ada internet.',
   'result.reason.generic': 'Ada masalah. Tiada wang dicaj.',
+  'offline.banner': 'Tiada internet. Anda masih boleh lihat jualan dan bantuan. Bayaran dihentikan sementara.',
   'demo.offline': 'Pura-pura tiada internet',
   'demo.offline.on': 'Hidup',
   'demo.offline.off': 'Mati',

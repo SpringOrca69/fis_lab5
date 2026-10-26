@@ -1,5 +1,5 @@
 import { CheckCircle2, Download, Printer, Share2, TriangleAlert, Wallet } from 'lucide-react'
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { Link, Navigate, useNavigate, useParams } from 'react-router'
 import { AppShell } from '@/components/AppShell'
 import { DayPicker } from '@/components/report/DayPicker'
@@ -12,6 +12,27 @@ import { canShare, downloadCsv, shareReport } from '@/lib/exportReport'
 import { formatCurrency, formatDate, formatTime } from '@/lib/format'
 import { buildCsv, COLLAPSED_ROWS, filterByPeriod, isReportDate, PERIODS, reportDateKeys, type Period } from '@/lib/report'
 import { cn } from '@/lib/utils'
+
+export const REPORT_LOADING_MS = 400
+
+/** Short artificial delay on the first report of the session so the skeleton state exists. */
+let loadedOnce = false
+
+function ReportSkeleton({ label }: { label: string }) {
+  return (
+    <div className="flex flex-col gap-5" role="status">
+      <span className="sr-only">{label}</span>
+      <div className="h-14 animate-pulse rounded-control bg-line" aria-hidden />
+      <div className="animate-pulse rounded-card bg-surface p-5 shadow-card" aria-hidden>
+        <div className="h-5 w-40 rounded bg-line" />
+        <div className="mt-3 h-12 w-48 rounded bg-line" />
+        <div className="mt-4 h-5 w-56 rounded bg-line" />
+      </div>
+      <div className="h-16 animate-pulse rounded-control bg-line" aria-hidden />
+      <div className="h-16 animate-pulse rounded-control bg-line" aria-hidden />
+    </div>
+  )
+}
 
 const actionBtn =
   'flex min-h-tap-pay items-center justify-center gap-2 rounded-control border-2 border-brand-700 bg-surface px-4 text-base font-bold text-brand-900'
@@ -31,6 +52,15 @@ function ReportDay({ day, todayKey }: { day: string; todayKey: string }) {
   const [period, setPeriod] = useState<Period>('all')
   const [expanded, setExpanded] = useState(false)
   const isToday = day === todayKey
+  const [loading, setLoading] = useState(!loadedOnce)
+  useEffect(() => {
+    if (!loading) return
+    const id = window.setTimeout(() => {
+      loadedOnce = true
+      setLoading(false)
+    }, REPORT_LOADING_MS)
+    return () => window.clearTimeout(id)
+  }, [loading])
 
   const report = useMemo(() => reportForDate(state, day), [state, day])
   const { reconciliation: rec } = report
@@ -59,6 +89,9 @@ function ReportDay({ day, todayKey }: { day: string; todayKey: string }) {
 
   return (
     <AppShell title={title}>
+      {loading ? (
+        <ReportSkeleton label={t('report.loading')} />
+      ) : (
       <div className="flex flex-col gap-5">
         <div className="hidden print:block">
           <p className="text-lg font-bold">{state.merchant.name}</p>
@@ -194,6 +227,7 @@ function ReportDay({ day, todayKey }: { day: string; todayKey: string }) {
           </button>
         </section>
       </div>
+      )}
     </AppShell>
   )
 }

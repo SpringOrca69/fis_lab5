@@ -172,6 +172,7 @@ export const zh: Dictionary = {
   'result.reason.insufficient': '礼券的金额不够付这笔钱。',
   'result.reason.network': '没有网络。没有扣任何钱。有网络时请再试。',
   'result.reason.generic': '出了点问题。没有扣任何钱。',
+  'offline.banner': '没有网络。您仍可查看销售和帮助。暂时无法收款。',
   'demo.offline': '假装没有网络',
   'demo.offline.on': '开',
   'demo.offline.off': '关',
