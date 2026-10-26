@@ -8,7 +8,7 @@ Branch `phase-7`. Commands run: lint (clean), `npm run test` (121 passed), `npm 
 | B-2 | pass | Diff vs main: zh/ms/ta dictionaries, captions, tests, README note, small layout-only tweaks (BottomNav, DayPicker, Scanner label wrap, Help call button, PaymentFailed wrap, Tamil amount size). No later-phase features. |
 | B-3 | pass | grep of zh/ms/ta/captions for credited/入账/kredit/வரவு/official/hawker/1800/6123/Stall 01: no hits. Only helpline is `6000 0000 (demo)` (from constant, unchanged); `{phone}` placeholders kept. |
 | B-4 | pass | Key parity enforced by TS type + `translations.test.ts`; no new keys added. |
-| B-5 | pass | Min font 16px (`text-sm`, project minimum), base 18px; BottomNav/DayPicker keep `min-h-tap-pay`/`min-h-tap`. Layout fixes only switched truncate to wrap; Tamil "No money was taken" shrinks to 1.8rem (32px), still the largest text on failure. |
+| B-5 | pass | Min font 16px (`text-sm`, project minimum), base 18px; BottomNav/DayPicker keep `min-h-tap-pay`/`min-h-tap`. Layout fixes only switched truncate to wrap; Tamil "No money was taken" is 1.5rem (27px at 18px base, above the 26px headline) after the loop-1 fix. |
 | P7-1 | pass | `translations.test.ts`: all EN keys in ZH/MS/TA, no TODO-TRANSLATE, no empty strings, and none in `src` or `public/captions`. `git diff main -- src/i18n/en.ts` is empty (English unchanged). Placeholders {x}, HeartPay, CDC, GovTech, Singpass preserved in all. |
 | P7-2 | pass | `e2e/phase7.spec.ts`: 19 screens x 4 languages at 390x844, no horizontal scroll and no element outside viewport. Screenshots in `reviews/screenshots/phase-7/`. |
 | P7-3 | pass | Playwright asserts Noto Sans SC (zh) and Noto Sans Tamil (ta) faces are loaded; screenshots show no empty boxes. |
@@ -26,5 +26,8 @@ All four are accurate and plain, with "confirmed" and "paid tonight" semantics a
 
 ## Defects
 None found. Note: running e2e regenerates old-phase screenshots (phase-2..6); these were not committed.
+
+## Re-test after loop-1 fix (commit aec2b6b)
+lint clean, vitest 121/121, build ok, e2e 41/41. `break-words` removed from the PaymentFailed no-money line; ta-08 and ta-09 screenshots viewed: the line wraps only between words (பணம் / எடுக்கப்படவில்லை), is larger (27px) than the 26px headline, nothing overflows on the failed screens in any language (P7-2 checks failed screens for all 4 languages), no text under 16px minimum / 18px base. The blue box seen around the headline is the programmatic focus ring.
 
 ## Verdict: PASS (P7-4 native review remains out of band)
